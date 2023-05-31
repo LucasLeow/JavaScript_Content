@@ -128,7 +128,204 @@ let production = () =>{
 
 
 order(0,production);
+
+
+-- Promises --
+	- Solution to Callback hell
+	- Callback forms relationship (Grandparent -> parent -> children etc.)
+	- Promises take instructions (do task1 then task2 then task3 etc.)
+		- can keep code clean
+		
+	-- Promise cycle --
+		1) Promise is made (Pending)
+		2) Becomes either RESOLVE or REJECT
+		3) if RESOLVE:
+			- .then().then().then() etc.
+		4) if REJECT:
+			- .catch()
+		5) .finally() // will always run (optional)
+
+	-- 4 more essential concepts of promises --
+		1) Time & Tasks
+			- Each task requires some time to execute
+		2) Promise chaining
+			- .then().then().then() etc.
+			- return from previous .then() passes on to next .then() as parameter
+		3) Error handling
+			- .catch()
+		4) .finally() handler
+		
+		
+	eg.
+	
+		let stocks = {
+		  fruits: ["strawberry", "grapes", "banana", "apple"],
+		  liquid: ["water", "ice"],
+		  holder: ["cone", "cup", "stick"],
+		  toppings: ["chocolate", "peanuts"]
+		};
+
+		let is_shop_open = true;
+
+		let order = ((time, task) => {
+		  return new Promise((resolve, reject) => {
+			if (is_shop_open) {
+			  
+			  setTimeout(() => {
+				resolve(task());
+			  }, time)
+			} else {
+			  reject(console.log("Shop is closed"));
+			}
+		  })
+		})
+
+		order(1000, () => {
+		  console.log(`${stocks.fruits[0]} was selected`);
+		})
+
+		.then(()=> {
+		  return order(0000, () => {
+			console.log("production started");
+		  })
+		})
+
+		.then(() => {
+		  return order(2000, () => {
+			console.log("Fruit was chopped");
+		  })
+		})
+
+		.then(() => {
+		  return order(2000, () => {
+			console.log("Water & ice added");
+		  })
+		})
+
+		.then(() => {
+		  return order(1000, () => {
+			console.log("machine started");
+		  })
+		})
+
+		.then(() => {
+		  return order(2000, () => {
+			console.log("Ice cream served");
+		  })
+		})
+		
+		.catch(() => {
+			console.log("Customer left");
+		})
+		
+		.finally(() => {
+			console.log("Day ended, shop is closed");
+		})
+	
+	/* return is needed to put promises into sequence. Else, all will execute parallel
+	
+
+
+-- Async/Await --
+	- Proclaimed better way to write promises
+	- shorter way to write promise
+		
+		- async
+		- try & catch
+		- await
+	
+	async function order () {
+		try{
+			await task;
+		}
+		catch(error) {
+			console.log("task doesn't exist yet", error);
+		}
+		finally{
+			console.log("Run code anyway");
+		}
+	}
+	
+	order();
+	
+	order()
+	.then(() => {
+		console.log("Can also use .then()");
+	})
 	
 	
+	- Await -
 	
+	let toppings_choice = () => {
+		return new Promise((resolve, reject) => {
+			setTimeout(()=>{
+				resolve(console.log("Retrieving toppings"));
+			}, 3000)
+		});
+	}
 	
+	async function kitchen() {
+	
+		console.log("Station 1");
+		console.log("Station 2");
+		console.log("Station 3");
+		await toppings_choice();
+		console.log("Station 4");
+		console.log("Station 5");
+	}
+	
+	kitchen()
+	
+	- Ice Cream Shop eg -
+	
+		let stocks = {
+	  fruits: ["strawberry", "grapes", "banana", "apple"],
+	  liquid: ["water", "ice"],
+	  holder: ["cone", "cup", "stick"],
+	  toppings: ["chocolate", "peanuts"]
+	};
+
+	let is_shop_open = true;
+	
+	function task(time) {
+		return new Promise((resolve, reject) => {
+			if (is_shop_open) {
+				setTimeout(resolve, time);
+			} else {
+				reject(console.log("shop is closed"));
+			}
+		});
+	}
+	
+	async function kitchen() {
+		try{
+		
+			await task(2000);
+			console.log(`${stocks.fruits[0]} selected`)
+			
+			await task(0000);
+			console.log("Production Started")
+			
+			await task(2000);
+			console.log("Fruit is cut")
+			
+			await task(2000);
+			console.log("Water & Ice added");
+			
+			await task(2000);
+			console.log("Machine started");
+			
+			await task(2000);
+			console.log("Ice cream served");
+			
+			
+		}
+		
+		catch(err){
+			console.log("Customer left", err);
+		}
+		
+		finally{
+			console.log("Day ended, shop is closed");
+		}
+	}
