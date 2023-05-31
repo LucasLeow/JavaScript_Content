@@ -1,0 +1,1081 @@
+JSX, Typescript to work with JS framework
+
+
+Babel.js: Tool used to convert modern JS (ES6) to backward compatible version of JS to run in old/modern browser.
+
+Typescript: variant of JS (.ts extension)
+
+JS Framework: React, Vue, Angular: Write JS based front-end applications
+	- React: Utilize JSX (JS XML)
+	
+JS Buildtools: npm, WebPack, Gulp: Package managers for JS to help install libraries and manage dependencies
+
+Node.js: JS runtime environment to allow running of JS anywhere outside of browser
+	- Built using Chrome V8 Engine
+	
+Javascript functions are first-class citizens
+	- can store in variables
+	- can pass to other functions as arguments
+	- can return function as values
+	
+
+-- Common Questions --
+	1) What can be done using JS?
+	- Back then was for interactive web design
+	- now can build full blown apps / mobile apps / command line tools / games
+	- In web, JS is used for events, to implement behaviour (DOM)
+
+	2) Where JS run?
+	- Designed to run in browser
+	- Every browser have JS engine to run JS
+	- NodeJS (C++ program with Chrome V8 JS Engine embedded within)
+		- can run JS out of browser and be used as backend language
+		(Browser / NodeJS provides runtime environment for running JS code)
+		
+	3) JavaScript vs ECMAScript
+	- ECMAScript is a specification to standardize JS
+	- JS conforms to ECMAScript
+		- ES6 in 2015 released many new function
+	
+-- Set up --
+	Development Environment
+		- VSCode (Popular IDE)
+		- Sublime / Atom
+
+	NodeJS: Runtime environment to run JS code (Not necessary)
+	- install 3rd party libraries
+
+
+-- Writing JS Code --
+	1) Writing JS Code in HTML (typically not done unless code short)
+	- Write between <script> </script> tag
+	- typically added at end of <body> tag
+		- browser parses file from top to bottom
+			- if put at head section, a lot of JS code parsed, making web load slower
+		- code within script may want to interact with HTML elements
+			- if added at start, element have not yet been parsed
+	- Exception: Using 3rd party code (Must add at <head> section)
+		eg: Bootstrap
+	
+	<script async src = "script.js"></script>
+	async: JS loaded independently of other scripts, will not block page from loading
+	
+	<script defer src = "script.js"></script>
+	defer: load script only after page is loaded (useful if script dependent on other scripts/elements)
+	
+	async & defer allow browser to continue parsing HTML while JS downloaded.
+	async download & executes JS as soon as its available
+		- may delay loading of other resources on page such as images if file large
+		- DOM might not have been loaded when script utilize some elements
+	defer waits until HTML parsed before downloading external scripts
+		- won't slow down initial page load
+		- if have lots of scripts defer, may delay subsequent actions after page loaded
+
+	2) Writing JS code in separate .js file
+	- if have thousands of .js file, can compile into a bundle & serve bundle to client
+	- write in index.js file, then in html <script src = "index.js"></script>
+	
+
+-- Variables --
+
+	let myVariable = 0;
+		- block scoped variable unless declared globally
+		- recommended to use this to avoid logic error in code
+	
+	const myVariable = 0;
+		- let and const more commonly used (introduced in ES6)
+		- creates block scoped variables (within {} block)
+
+	var myVariable = 0; (avoid using unless have special case to do so)
+		Problems:
+		- creates global scoped variables
+		- variables accessible across entire function instead of just within block {}
+		- assigns variable to the window object as global variable
+			- if 3rd party library also uses same variable name, causes problem in program
+		
+		
+~~ Variables Naming conventions: ~~
+
+	- cannot be reserved keyword
+	- should be meaningful
+	- cannot start with number
+	- cannot have space / hyphen
+
+~~ Variable Data Types ~~
+
+	- Primitive Types
+		- String: "Lucas"
+		- Number: 30 (no distinction between float and int)
+		- Boolean: true / false
+		- Undefined: let myvar = undefined; (not commonly used)
+		- Null: let lastName = null; (clearly indicate that no value is assigned) (type = object)
+	
+	- Reference Types
+		- Objects
+			- JSON : {attribute1: value,
+			attribute2: value}
+			- person.name = "new Name"; (dot notation to access key)
+			- person["name"] = "new Name" (bracket notation)
+		
+		- Arrays
+			- let selectedColors = ["red", "blue", "green"];
+			- console.log(selectedColors[0]);
+			- array size is dynamic. Automatically expand as needed
+			- array can store different type of object within array
+			- selectedColors.length // returns number of length of array (commonly used)
+		
+			eg.
+				console.log(selectedColors.length)
+				console.log(selectedColors[0] + " " + selectedColors[1]);
+				
+		- Functions
+			- Building blocks for javascript
+			function greet(name) {
+				console.log("Hello " + name);
+			} 
+			greet("John");
+			
+			function square(number) {
+				return number * number;
+			}
+		
+		- Date Object
+		- DOM Object (Document Object Model) (HTML Related) (Manipulate Webpages)
+		
+		
+
+
+	- Dynamic Type Variable
+		- JS is dynamic programming language
+		- Meaning type of variable can change during run time
+		- if declared as string, can later assign number to variable
+		- type of variable determined at runtime based on value assigned to variable
+		
+
+JAVASCRIPT BY STEVE GRIFFIN
+
+~~ 1 Intro to Javascript ~~
+	Variables:
+	
+		```
+		var name = "Lucas"; // dtype = String
+		var id = 123412; // dtype = Number
+		var alive = true; // dtype = Boolean
+		var xyz; // <- Undefined by default.
+		```
+		
+		console.log(name);
+	
+		
+~~ 2 Working with variables & datatypes ~~
+
+	let name = "Lucas";
+	name = name + "Leow"; // String concatenation
+	
+	Mathematical Operators:
+	+
+	-
+	*
+	/
+	
+	- Array, DOM, Functions, Date Objects
+
+~~ 3 & 4 if, if-else statements ~~ (truthy / falsey)
+	if ( valid ){
+		// do something if true (true, any value not 0, any string not empty) (truthy)
+	} else if ( almost_valid ) {
+		// do something if alternate condition true
+	} else {
+		// do something if false (false, null, undefined, 0, "", '', NaN) (falsey)
+	}
+	
+	-- 46 Null vs Undefined --
+		- Null: Intentionally set to variable (At the moment, there's nothing)
+		- Undefined: Nonexistentence of something requested
+		
+		- null is object type
+		- undefined is undefined type
+		
+		eg.
+		
+		var x;
+		console.log(x); // undefined (nothing assigned to yet)
+		
+		
+	
+	Comparison Operators:
+	< <=
+	> >=
+	!= (5 != "5" : false)
+	!== (5 !== "5" : true) (strict inequality)
+	== (2 == "2" : true) (JS converts "2" to number 2)
+	=== (strict equality) (2 === "2" : false)
+	!valid (not valid)
+	
+	== : Comparing values
+	=== : Comparing objects
+		
+~~ 5 Logical Operators ~~
+	OR : ||
+	AND : &&
+	
+	let ingredients = ["lettuce", "cheddar", "ham"];
+	
+	let sandwichHas = function(ingredient) {
+		for (let i of ingredients) {
+			if (ingredient == i) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+	}
+	
+	if ( sandwichHas("ham") || sandwichHas("chicken") ) {
+		console.log("Sandwich has meat");
+	}
+
+~~ 6 Ternary Operator ~~
+	(condition) ? run_if_true : run_if_false;
+	
+	let age = 15;
+	let height = 1.8;
+
+	(age >= 18) ?  
+		(height >= 1.75) ? console.log("eligible to take ride") : console.log("Too short to take ride") 
+		: console.log("Too young to take ride");
+		
+~~ 7 & 8 Arrays ~~
+
+	let names = ['Luke', 'Leia', 'Han', 'Chewie'];
+	console.log(names.length);
+	console.log(names[1]);
+	
+	names.push("Lucas"); // add to end of list
+	let last = names.pop(); // remove last item from list & save into last
+	
+	names.unshift("First"); // add to front of list
+	let first = names.shift(); // remove first item from list & save into first
+	
+	names.splice(start_idx, num_items, to_replace)
+	eg:
+	names.splice(1, 1, "Kenny", "Tommy"); // removes names[1] and replace with ["Kenny", "Tommy"]
+	
+	names.splice(1, 2); // remove 2 items starting from index 1
+	let removed_names = names.splice(1, 2); // saves the 2 removed names into removed_names
+	
+	-- Sorting Arrays --
+	names.sort(); // Sorts the array in ascending order
+	names.reverse(); // reverse the order of the array
+		
+	* if want reverse sort, just sort first then reverse
+	
+	-- Searching within Arrays --
+	let position = names.indexOf("Leia"); // returns the idx of first occurrence of item if exist
+	* if not found, returns -1
+	
+	let position = names.lastIndexOf("Leia"); // searches from the back and return idx of last occurrence if exist
+	
+	-- 25 Array map method --
+		- syntax very similar to array forEach method 
+		- calls a function for every element in array
+		- map fn manipulates the element in the array and returns it in new array
+		- if array has 4 elements, map fn returns 4 elements to new array
+		
+		eg.
+		let names = ["Tommy", "Bob", "Jenny", "Timmy"];
+		
+		let new_array = names.map(function(item, index, array) {
+			return 12; 
+		})
+		// output will be [12, 12, 12, 12] since 4 elements in names array
+		
+		// anonymous function notation
+		let names_length = names.map(function(item, index, array) {
+			return item.length;
+		})
+		
+		// arrow function notation
+		let names_length = names.map((item) => item.length);
+	
+	-- 26 Array filter method --
+		- also calls function for each element in array
+		- function returns only true or false
+			- if condition true, element returned to new array
+			- if false, nothing returned back
+		eg.
+		
+		let numbers = [23, 45, 14, 66, 94, 26, 40];
+		let threshold = 30;
+		
+		let smallNumbers = numbers.filter(function(item, index, array) {
+			return item < threshold; // if condition true, item returned to new array
+		});
+		
+		// arrow notation
+		let smallNumbers = numbers.filter((item) => item < threshold);
+		let oddNumbers = numbers.filter(num => num % 2 != 0);
+		
+	-- 27 Array reduce method --
+		- also utilize callback function similar to map & filter methods
+		- has additional parameter <initialValue> passed to callback function
+		- returns a single value from array based on specified condition
+		- "reducing" array to single value
+			- i.e return sum of all numbers in array
+			
+			eg.
+			
+			let numbers = [12, 34, 56, 78, 91];
+			
+			let sum = numbers.reduce(function(passedIn, item) {
+				return passedIn + item; // first passedIn value is 0
+			}, 0)
+			
+			eg 2. // returning smallest char (unicode)
+			let alphabets = ['H', 'K', 'L', 'M', 'C', 'U', 'B'];
+			
+			let first = alphabets.reduce(function(current, item) {
+				console.log("comparing", current, "to", item);
+				return (current < item) ? current : item;
+			}, '\u0434');
+			
+			console.log(first);
+	
+	-- 28 Array concat method --
+		let a = [2, 4, 6, 8];
+		let b = [1, 3, 5, 7];
+		
+		let c = a.concat(b);
+		console.log(c);
+		
+		let d = [].concat(a, b, c);
+	
+	-- 29 Array "includes" method --
+		- check if array includes certain items (string must match strictly)
+		eg.
+		let names = ["name1", "name2", "name3"];
+		
+		let check1 = "name1";
+		
+		let hasName = names.includes(check1, 1); // search start from idx 1
+		console.log(hasName);
+		
+	-- 30 Array "some" method --
+		- similar to includes but does not require strict matching
+		- so long as string matches some of the content of element, returns true or false
+		- utilizes callback fn
+		- will stop once fn returns true
+		
+		eg.
+		
+		let movies = ["Star wars", "Star Trek", "Jaws", "Jurassic World"];
+		
+		let stars = movies.some(function(item, idx) {
+			console.log(idx, item);
+			return idx;
+		})
+		
+		console.log(stars);
+		
+		-- 31 Array "every" method --
+			- check if every element in array pass certain condition
+			- eg. check if every element > 20
+			
+			eg. 
+			let numbers = [23, 42, 45, 62, 50];
+			
+			let greaterThan20 = numbers.every(function(num) { // function(item, idx, array)
+				return num > 20;
+			});
+			console.log(greaterThan20);
+		
+		-- 32 Chaining Array Methods --
+			- to perform multiple functions at once 
+			eg: extracting people who have "replicant.io" in emails
+			
+			let people = [
+			{"id": 123, "name": "Tommy", "email": "tommy@bladerunner.org"},
+			{"id": 234, "name": "Jessie", "email": "Jessie@replicant.io"},
+			{"id": 345, "name": "Jane", "email": "jne12@replicant.io"}
+			];
+			
+			let replicant_emails = people.filter(function(item) {
+				return item.email.indexOf("@replicant.io") != -1; // if no replicant, -1 returned
+			});
+			
+			let names = replicant_emails.map(function(item){
+				return item.name;
+			});
+			
+			console.log(names);
+			
+			let desired_names = people.filter(item => item.email.indexOf("@replicant.io") != -1).map(item => item.name);
+			console.log(desired_names);
+	
+	-- 37 Nested Loops for Multidimension Arrays --
+		let twoD = [
+			[1,2,3],
+			[3,4,5],
+			[6,7,8]
+		];
+
+		let bigHero = {
+			characters: [
+			{"name": "Hiro", "voice": "Ryan Potter"},
+			{"name": "Baymax", "voice": "Scott Adsit"},
+			{"name": "Fred", "voice": "T.J. Miller"}
+			]
+		};
+
+		let rows = twoD.length;
+		for(let i = 0; i < rows; i++) {
+			let col = twoD[i].length;
+			console.log("row", i + 1)
+			for (let j = 0; j < col; j++) {
+				console.log(twoD[i][j]);
+			}
+		}
+		
+		for(let i = 0; i < bigHero.characters.length; i++) {
+			for (let prop in bigHero.characters[i]) {
+			console.log(prop, bigHero.characters[i][prop]);
+			}
+		}
+	
+~~ 9 Javascript Objects ~~
+	- key : value pairs
+	
+	* Not necessary for object keys to have quotation
+	* Having quotation can have more exotic name
+	
+	name : "Woody" == "name" : "Woody"
+	let dog = {
+		"name" : "Woody",
+		"type" : "dog"
+	};
+	
+	dog.age = 1;
+	dog["age"] = 14;
+	
+	-- 50 Object assign() to copy / merge objects --
+		- Object.assign(target, sources)
+			- eg. let copy1 = Object.assign({}, obj1); // copies obj1 into {}, saved in copy1
+			
+	
+	let obj1 = {"prop1" : 1, "prop2": 3};
+	let obj2 = {"prop3": true, "prop4": "String"};
+	
+	let copy1 = Object.assign({}, obj1);
+	let merged = Object.assign(obj1, obj2) // obj2 merged into obj1
+	let copy_edited = Object.assign({"custom_added_prop": "value"}, obj1);
+		- if existing property, the old value will be overwritten]
+		
+	-- 55 Object create() method --
+		- links different objects together with the prototype
+		- Object.create(prototype, ObjectProperties)
+		eg.
+			let obj = {"name": "Lucas"};
+			
+			let obj2 = Object.create(obj, {})
+			console.log(obj2.name); // Output: Lucas (by referencing to self & prototype: obj)
+			
+			let obj3 = Object.create(obj2, {
+				fullName: {
+					configurable: true,
+					writable: true,
+					enumerable: true,
+					value: "Lucas Leow"
+				},
+				canBowl: {
+					configurable: true,
+					writable: true,
+					enumerable: true,
+					value: true
+				}
+			});
+			
+			console.log(obj3); //  shows fullName and canBowl
+			console.log(obj.name); // shows Lucas, accessed from prototypes
+			
+			
+~~ 10 & 11 For Loop ~~
+	let names = ["name1", "name2", "name3", "name4", "name5"];
+	let numNames = names.length;
+	
+	for (let i = 0; i < numNames; i++) {
+		console.log(names[i]);
+	}
+	
+	for (let i = 0; i < numNames; i = i + 2) { // every alternate item in list
+		console.log(names[i]);
+	}
+	
+	for (let i = numNames-1; i > 0; i--) { // accessing backwards
+		console.log(names[i]);
+	}
+	
+	-- For in Loops --
+		- Typically for objects, where no length is obtainable
+		
+		let monsters = {
+			"canada" : "sasquatch",
+			"Nepal" : "Yeti",
+			"Scotland" : "Lochness Monster"
+		};
+		
+		for (let key in monsters) {
+			console.log(key);
+			console.log(monsters[key]);
+			
+			console.log("In", key, "we have", monsters[key]);
+		}
+		
+		let names = ["name1", "name2", "name3", "name4", "name5"];
+		for (let idx in names) {
+			console.log(names[idx]);
+			}
+		
+	-- 24 forEach loops (method)
+		- method for array objects
+		- call a fn 1 time for each element in array
+		- passes in the following as arguments:
+			- item
+			- index
+			- array
+		
+		eg:
+		let names = ["name1","name2", "name3", "name4"];
+		
+		names.forEach(output); // calls the output fn for each element in array
+		// output fn is the callback function
+		
+		function output(item, index, array) {
+			console.log(index, item);
+		}
+		
+		- Typically, anonymous function used instead of function declaration
+		- or arrow fn can also be used
+		
+		names.forEach(function(item, idx, array) {
+			console.log(item, idx);
+		});
+		
+		names.forEach( (item, idx) => {
+		if (item === 'name1') {
+			item = item.toUpperCase();
+		} else {
+			item = item.toLowerCase();
+		}
+		console.log(idx, item);
+		}
+		);
+		
+	-- 49 for..of loops --
+		- recent addition 
+		- quite similar to for in loops
+			- instead of providing index, provides the value
+			
+		eg.
+		let show = {
+			"actors": ["actor1", "actor2", "actor3"],
+			"seasons": 12
+		};
+		
+		for (idx in show.actors){
+			console.log(idx); // 0, 1, 2
+		}
+		
+		for (names of show.actors) {
+			console.log(names); // actor1, actor2, actor3
+		}
+			
+~~ 12 While Loops ~~
+
+	// check condition first then run
+	while (condition) {
+		do something
+	}
+	
+	
+	// run something at least once before checking
+	do {
+		do something
+	} while (condition)
+	
+	let total = 0;
+	
+	while(total < 30) {
+		total += Math.floor(Math.random() * 5 + 1); // Math.random() returns float between 0 and 1
+		console.log(total);
+	}
+
+~~ 13, 14, 15, 16 Functions In JavaScript ~~
+	
+	function buy_burgers(balance, cost) {
+		if (balance - cost >= 0) {
+			console.log("Balance remaining: ", (balance - cost).toFixed(2)); // 2 decimal places
+		} else {
+			console.log("Insufficient balance to purchase burger");
+		}
+	}
+	
+	buy_burgers(5, 10);
+	
+	
+	let functionList = [function1, function2, function3];
+	function performFunctions(functionList) {
+		for (let i = 0; i < functionList.length; i++) {
+			functionList[i](); // uses (call) the function)
+			functionList[i].call(); // Alternate way to call function
+		}
+	}
+	
+	-- Arrow Functions --
+		- to write functions more compactly
+		- may cause readability issues
+		- typically for one-liner functions 
+		- not recommended for long functions
+		- typically used for callback functions (sending in fn as parameter to perform other task)
+		
+		- leave out function keyword
+		- anything before arrow is the function parameter
+		- anything after arrow is the function "body" and return
+		
+		eg:
+		let n1 = 5;
+		let n2 = 6;
+		
+		let sum = (a, b) => a + b;
+		
+		console.log(sum(n1,n2));
+		
+		eg2:
+		let numbers = [123, 234, 345, 456];
+		
+		let bigA = numbers.filter( number => number > 300);
+		console.log(bigA);
+		
+		eg3: (multiple lines)
+		let names = ["amy", "bobby", "charlie", "tommy"];
+		
+		names.forEach( (name, idx) => {
+		console.log("Multiple Line Function");
+		console.log(idx, item));
+		}
+		
+	~~ 35 Function currying ~~
+		- advanced technique of having multiple return statement within function
+		- each return statement returns a function
+		- perform different actions based on the return functions instead of creating multiple functions
+		- creating a brand new function by returning from an existing function
+		- can utilize information from wrapper(outer) function(s)
+		
+		eg. Want to create greet function based on multiple language using single function
+		
+		function greet(greetings) {
+			return function(name) {
+				console.log(greetings, name);
+			}
+		}
+		
+		let english = greet("Hi");
+		let spanish = greet("Hola");
+		let svenska = greet("Hej");
+		
+		english("Lucas");
+		spanish("Dora");
+		
+	-- 36 Callback Functions (frequently used in Async) -- 
+		- Callback: Function (1) passed as parameter to another function (2)
+		- Once function (2) completes action, call function (1)
+		eg:
+		Function1 passed as parameter to Function2. (Function1 is the callback function)
+		Function2 performs some action within.
+		After performing actions, Function2 calls Function1 
+		
+		function doThing(taskComplete) {
+			console.log("Doing step 1");
+			console.log("Doing step 2");
+			console.log("Complete");
+			taskComplete(); // can even include parameters if passing info around
+		}
+		
+		function taskComplete() {
+			console.log("Task Completed");
+		}
+		
+		doThing(taskComplete);
+		
+		eg 2: Built in function requiring callBack function
+		
+		setTimeout(my_callback, 1000, "Name1", "Name2", "Name3");
+		// 1000 = 1000ms == 1s | arguments can be list of args sent to callback fn
+
+		function my_callback(n1, n2, n3){
+			console.log(n1, n2, n3);
+		}
+		
+		eg 3: navigator getCurrentPosition method requiring 2 callback fn
+		
+		navigator.geolocation.getCurrentPosition(gotPosition, errorRetrieving, {});
+		
+		function gotPosition(pos) {
+			// successfully retrieved position, receiving position object
+		}
+		
+		function errorRetrieving(e) {
+			// failed to retrieve position, get error object
+		}
+		
+	-- 39 Immediately Invoked Function Expressions (IIFE)
+		- asking the function run immediately
+		- must include parenthesis
+		- typically used to create modules within code
+		- essentially like creating a namespace
+		- somethingElse.name will not conflict with anotherElse.name 
+		eg.
+		var somethingElse = (function(nm) {
+			return {
+				"name" : nm,
+				"id": 123,
+				x: function() {
+				console.log("x function");
+				}
+			};
+		})("Bob");
+		
+		console.log(somethingElse.x());
+	
+		
+		
+~~ 18 Hoisting ~~
+	- All variables and functions are hoisted on first run through
+	- program know variables and functions exist
+	- hoisted variable values are initially undefined
+	- hoisted functions declarations will already exist
+		- therefore, can call function even before function declaration
+	- hoisted function expression will be undefined
+		- therefore, cannot call function expression before the expression
+		
+		
+~~ 20 Working with Strings ~~
+	- Strings are immutable
+	- Any functions modifying string returns a new string
+	- original string untouched
+	
+	eg.
+	
+		var str1 = new String("Toy Story");
+		var str2 = String("Wall-E");
+		var str3 = "Cars"; // string literal
+		
+	-- Common String methods --
+		
+		str1.toUpperCase();
+		"StringLiteral".toLowerCase();
+		"String Literal".substring(0,6); // returns "String"
+		
+		(Case sensitive)
+		"String".indexOf("r"); // returns idx of first occurrence of r
+		"Strings".lastIndexOf("s"); // returns idx of first occurrence of "s" from the end
+		
+		var result = "".concat(str1, " ",str2, " ",str3);
+		console.log(result);
+		
+		let hello = "Hello World From Node.js";
+		let justNode = hello.slice(17); // slice string from idx 17 onwards
+		console.log(justNode); // prints "Node.js"
+	
+	-- 23 String.split to array & Array.join to string --
+		- Splitting String to array:
+		
+			let sentence = "Hello World I am Lucas";
+			let words = sentence.split(" ").sort(); // split words by space, sort alphabetically
+			console.log(words);
+			
+		- Combining array elements into string, separated with -
+			let combined = words.join("-");
+			console.log(combined);
+			output: 
+				"Hello-World-I-am-Lucas"
+
+~~ Template Strings ~~
+
+	let name = "Lucas";
+	console.log(`Hello ${name}`);
+
+~~ 21 Escape Sequences & Unicode Chars ~~
+	- '\' used to escape sequences
+	- '\u' : next 4 digits will be pointing to specific character within unicode charset
+		- unicode.org/charts/ shows collection of characters
+	
+	eg.
+	let yes_in_Russia = '\u0434\u0430';
+	let milk_in_danish = '\u00E6lk';
+	
+	let log = console.log;
+	log(yes_in_Russia);
+	log(milk_in_danish);
+	
+	log(milk_in_danish.charCode(1));
+	
+	log(yes_in_Russia.charCodeAt(0)); // returns 1076 representing charCode of character
+	let s = String.fromCharCode(1076) // returns character for given charCode
+	log(s);
+	
+	-- Escape Sequence --
+	log('\'\''); prints '' by escaping it with \
+	log(""); prints \ by escaping it with \
+
+
+~~ 22 Global Function | Number | Math
+
+	- Global Functions don't require object to call
+		- available at the global level
+		eg: 
+			let r = parseInt("123", 10); // convert string of digits into int, base 10
+			let b = parseInt("111", 2); // prints int value of 8
+	
+	-- Number (Object) --
+		let num = 234.234;
+		let r = Number.parseInt(num, 10); // base 10
+		console.log(r)
+		
+		let currency = num.toFixed(2); // prints number in 2 dp, typically for currency
+		console.log(currency);
+	
+	-- Math (Object) --
+	
+	let num = 234.234;
+	let n = Math.round(num); // rounds to nearest int
+	let f = Math.floor(num); // always rounds down
+	let c = Math.ceil(num); // always round up
+	
+	let r = Math.random(); // generates random no. b/w 0 and 1
+	
+	let max = Math.max(1,2,3,4);
+	
+	
+	console.log(n, f , c, r, max);
+	
+
+
+~~ 38 Javascript Timers (setTimeout, setInterval, clearTimeout, clearInterval) ~~
+	- wait (in milliseconds) then perform certain function
+	- setTimeout(fn_to_run, 1000, values_passed_to_fn_to_run) // 1000 ms == 1s
+	- setTimeout : Run fn once
+	- setInterval : Continuously run fn from given interval
+	
+	function log(msg) {
+		console.log(msg);
+		clearInterval(i1);
+	}
+	
+	let t1 = setTimeout(log, 1000, "hello");
+	let i1 = setInterval(log, 1000, "interval");
+	
+	// can be setTimeout(function_to_execute, 1000, "Name1", "Name2", "Name3");
+	
+	
+~~ 43 JS namespaces ~~
+
+	- suppose 2 JS files (namespace1.js & namespace2.js)
+	
+	namespace1.js:
+	
+	let ns1 = {
+		colorDiv: function(ev) {
+			let target = ev.currentTarget;
+			target.style.backgroundColor = "purple";
+			target.style.color = "white";
+		},
+		
+		init: function() {
+			let divA = document.getElementById("output");
+			divA.addEventListener("mouseout", ns1.colorDiv);
+		}
+	}
+	
+	ns1.init();
+	
+	namespace2.js:
+	
+		let ns2 = {
+		colorDiv: function(ev) {
+			let target = ev.currentTarget;
+			target.style.backgroundColor = "red";
+			target.style.color = "blue";
+		},
+		
+		init: function() {
+			let divB = document.getElementById("output");
+			divB.addEventListener("mouseover", ns2.colorDiv);
+		}
+	}
+	
+	ns2.init();
+
+~~ 44 Dates & Time in JS ~~
+	- does not calculate time/date difference
+	- moment.js (JS library) does the difference calculations
+	- date object store specific moment in time
+	
+	eg.
+	let d = new Date();
+	console.log(d); // 2023-05-23T02:15:04.943Z (Zulu time = UTC)
+	
+	let d1 = new Date(15000000000);
+		- (time in ms) after Unix Epoch (Jan 1 00:00:00.000 1970 UTC)
+		
+	let str = "20 July 2012"; (local SGT Date)
+	let d2 = new Date(str);
+	console.log(d2); // 2012-07-19T16:00:00.000Z (-8hrs to convert to UTC from local SGT)
+	
+	let d4 = new Date(YYYY, M, D, h, m, s, ms)
+	let d4 = new Date(2023, 5, 23, 10, 41, 123); (provided time is local time)
+	
+	d.setFullYear(2023); // changes Year in the date
+	- d.setHours(14)
+	- d.setMinutes()
+	- d.setMonth()
+	- d.setDate()
+	
+	let t = d.getMinutes();
+	- d.getDay(); // day of week (0 to 6) (0 = sunday, 6 = saturday)
+	- d.toDateString(); // Tue May 23 2023
+	- d.toTimeString(); // 10:56:05 GMT+0800 (Singapore Standard Time)
+	- d.toISOString(); // 2023-05-23T02:56:20.880Z
+	- d.toJSON(); // 2023-05-23T02:56:34.485Z
+	
+	- d.toLocaleString(); // 23/05/2023, 10:56:58
+	- d.toLocaleString("en-SG"); // 23/05/2023, 10:57:34 am
+	- d.toUTCString(); // Tue, 23 May 2023 02:58:11 GMT
+	
+~~ 47 try...catch | Throwing Exceptions ~~
+
+	- "throw" keyword: Anything after throw cannot run (exception has occurred)
+	- can throw different datatypes (though not frequently used)
+	
+	eg.
+	throw 42;
+	throw "Exception Thrown";
+	throw true;
+	
+	try {
+		console.log("before throw");
+		throw "Error Message";
+	} catch(e) {
+		console.log("Caught", e) // e will be "Error Message"
+	} finally {
+		console.log("Runs no matter what");
+	}
+	
+	
+	try {
+		console.log("before throw");
+		throw {
+			name: "Bubba",
+			message: "Error Message"
+		};
+	} catch(e) {
+		console.log("Caught", e.message) // e will be "Error Message"
+	} finally {
+		console.log("Runs no matter what");
+	}
+	
+	Error types:
+		- EvalError
+		- InternalError
+		- RangeError
+		- ReferenceError
+		- SyntaxError
+		- TypeError
+		- URIError
+	try {
+		console.log("Before error");
+		throw new Error("An error");
+	} catch (e) {
+		console.log(e.name, e.message) // Error An error
+	}
+	
+	try {
+    console.log("Before error");
+    fetch(here);
+} catch (e) {
+    console.log(e.name, e.message) // ReferenceError, fetch is not defined
+}
+	
+	
+~~ 51 console method (Debugging tips & tricks) ~~
+
+	let R = "Ricky";
+	1) console.count(R); // count number of occurrence for R (excluding current method call)
+	
+	
+	2) console.time("identifier");
+		console.log("running some stuff");
+		console.timeEnd("identifier");
+		
+		//output: identifier: 4.338ms
+	
+	3) console.group(); // shows indent in browser console (nothing in terminal console)
+		console.log("Within first group");
+		console.groupEnd();
+		
+	4) console.info("Info");
+	5) console.error("Error");
+	
+~~ 52 NaN and isNaN ~~
+	- NaN: property of global object
+	- represents Not a Number
+	- NaN === NaN (true, anything else will be false)
+		even NaN == null (false) NaN == undefined (false)
+		
+	
+	- isNaN() first converts value to number
+		- e.g a = Number(true); // a = 1
+		
+		true -> 1
+		false -> 0
+		null -> 0
+		undefined -> NaN
+		
+	isNaN(true) // false. true casted to 1 as number
+	isNaN(false) // false
+	isNaN(null) // false
+	isNaN(undefined) // true
+
+~~ 54 "new" keyword in JS ~~
+	4 things occur when "new" used:
+		1) new object created
+		2) new object is prototype linked
+		3) new object set as "this" binding
+		4) if no return statement, a copy of object is returned 
+		
+~~ 56 "this" keyword in JS ~~
+
+	- for function expressions & function declaration, this references the variable that invoked the function
+		- if no variable called, will reference the global object (on browser is window obj)
+	- for arrow function, "this" will always reference where the function was declared
+	
+	eg.
+	
+	// "use strict"; // JS pragma (pre-processor directive) 
+	// (force modern interpreter to behave certain way)
+	
+	let box = document.querySelector(".box");
+	let myFunc = function() {
+		console.log("expression", this);
+	}
+	
+	let myFunc2 = () => {
+		console.log("arrow", this);
+	}
+	
+	myFunc(); // Global Window Object because no reference passed
+		- if "use strict", becomes undefined because no context passed
+	myFunc.apply(window); // Windows Object
+	myFunc.apply(box); // Box object (if box variable is valid)
+	
+	Usage:
+		- can use this.property to access certain parameters based on what this is referencing to

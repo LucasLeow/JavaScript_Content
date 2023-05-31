@@ -1,0 +1,625 @@
+
+
+URI : Uniform Resource Identifier
+	- identifies a resource using name, location or both
+	- identify resource (address with or without direction)
+	- not necessary intended to get resource, just an identifier
+	- Not all URIs are URLs
+	
+URL : Uniform Resource Locater
+	- identifies web address or location of a unique resource
+	- locate resource (address with direction)
+	- All URLs are URI 	
+	
+	
+~~ 1 Intro to Scripts in Browser~~
+	- add interactivity to browsers
+	- JS typically added to HTML file using <script> tag
+	
+	eg.
+		<script src = "movies.js"> </script>
+		<script src = "basic-web.js" async> </script> : 
+		"async" attribute: Don't run js until page loaded (akin to putting script at bottom of page)
+			- not all browser support async
+		
+		in movies.js:
+		
+			let movie = ["movie1", "movie2"];
+		
+		in basic-web.js:
+		
+			console.log(movie[1]);
+			
+		<script async src = "script.js"></script>
+		async: JS loaded independently of other scripts, will not block page from loading
+		
+		<script defer src = "script.js"></script>
+		defer: load script only after page is loaded (useful if script dependent on other scripts/elements)
+		
+		async & defer allow browser to continue parsing HTML while JS downloaded.
+		async download & executes JS as soon as its available
+			- may delay loading of other resources on page such as images if file large
+			- DOM might not have been loaded when script utilize some elements
+		defer waits until HTML parsed before downloading external scripts
+			- won't slow down initial page load
+			- if have lots of scripts defer, may delay subsequent actions after page loaded
+		
+~~ 2 Intro to DOM ~~
+	- DOM = Document Object Model (the way JS perceive everything on webpage)
+	- All HTML part of DOM
+		- 13 nodes in webpage (but only 3 most commonly manipulated)
+			1) Element nodes <div>
+			2) Attribute nodes <img src = ""> (src is the attribute)
+			3) Text nodes <div>Text written here is text node</div>
+
+	eg.
+	
+	in movie.js:
+	let movies = ["movie1", "movie2", "movie3"];
+	
+	in basic-web.js:
+	
+	let names = movies.join(", ");
+	let p = document.getElementById("para"); //locate any element with id "para"
+	// document is built in object representing webpage
+	p.textContent = names; // to include text content for html element
+	
+~~ 3 Finding HTML elements ~~
+
+	(3 common methods to access HTML elements) (There are other methods but not as common)
+	- document.getElementById("id_name"); // returns 1 element node
+	- document.querySelector("css_selector"); // returns 1st matched element node
+		- eg. document.querySelector(".main p.some");
+		- eg. document.querySelector(".class2");
+	- document.querySelectorAll("css_selector"); // returns NodeList (array containing HTML nodes)
+		- eg. let ps = document.querySelectorAll(".main p") // All <p> inside <main>
+		for (var i = 0; i < ps.length; i++ ) {
+			ps[i].textContent += "Looped";
+		}
+		
+~~ 4 Creating HTML content with JS ~~
+
+	- document.createElement("tagName"); // creates new HTML Element tag
+	- document.createTextNode("text"); // returns 1 text node
+	- parent.appendChild(node); // adds child to parent (adds to last child)
+	- parent.removeChild(node); // removes node from parent
+	- element.innerHTML // returns all text + html tags by an element
+	- element.textContent // changes text inside the element
+	- element.firstChild.nodeValue // returns value of node
+	- element.innerText: // returns all text by element & child
+	
+	createTextNode vs textContent:
+		- Both functions almost similarly
+		- createTextNode is typically for creating new text 
+			- can also be used for appending new text to existing text
+		- textContent is typically for modifying text
+			- modifies entire text unless use element.textContent += "new content"
+	
+	eg.
+	
+	let main = document.querySelector(".main"); // returns 1st match tags with class = "main"
+	let h2_main = main.querySelector("h2") // selects h2 inside main
+	h2_main.textContent = "This is H2 Title";
+	
+	let p = main.querySelector("p"); // returns 1st <p> inside <main class = "main"> tag
+	p.innerHTML = "A list of <strong>BOLD</strong> text."
+	
+	let ul = document.createElement("ul");
+	main.appendChild(ul);
+	
+	movies.forEach(function(item) {
+		let li = document.createElement("li"); // creates <li> tag
+		let txt = document.createTextNode(item);
+		li.appendChild(txt);
+		
+		li.textContent = item; // also works
+		
+		ul.appendChild(li);
+	});
+	
+~~ 5 Traversing DOM with JS ~~
+
+	- parent.children // returns nodeList of child elements
+	- parent.childNodes // returns nodeList of all nodes (element + text nodes)
+	- parent.firstElementChild // returns first child of element
+	- parent.lastElementChild // returns last child of element
+	- node.nextElementSibling // returns next Sibling of node
+	- node.previousElementSibling // returns previous Sibling of node
+	- node.parentNode // returns parent element
+	- parent.contains(node) // returns boolean
+	
+	*Advantage: Can traverse DOM without specifying class / id 
+		- by using Child / Parent / Sibling methods
+		- only need specify class / id on parent
+		- multiple ways to access same element
+		
+	eg.
+	let main = document.querySelector(".main");
+	
+	let c = main.children; // [h2, ul]
+	let c2 = main.childNodes; (text, h2, text, ul, text)
+	
+	console.log(c.length);
+	
+	let ul = main.children[1];
+	let h2 = main.firstElementChild;
+	let ul2 = h2.nextElementSibling;
+	
+	let all_li = ul.children;
+	let first_li = all_li[0];
+	let first_li2 = ul.firstElementChild;
+	
+	let txt = first_li.textContent;
+	let txt2 = first_li.firstChild.nodeValue;
+	
+	let exist = main.contains(first_li);
+	console.log(exist);
+	
+~~ 6 Manipulating DOM methods in JS ~~
+	- parent.insertBefore(newNode, referenceNode); // insert node before reference
+		- appendChild(node) only adds to last child
+		
+	- parent.replaceChild(newNode, oldNode);
+	- node.cloneNode(true); // copy node and optionally its children
+		- false: don't copy over children (eg. only <ul></ul>)
+		- true: copy children as well (eg. <ul><li> </li></ul>
+	
+	eg.
+	let ul = document.querySelector(".main ul");
+	let li = ul.children;
+	let refNode = li[5];
+	let newNode = document.createElement("li");
+	newNode.textContent = "newMovie";
+	
+	ul.insertBefore(refNode, newNode);
+	
+	let jp = document.createElement("li");
+	jp.textContent = "JurassicPark";
+	
+	ul.replaceChild(jp, li[5]);
+
+~~ 7 Attribute nodes in DOM ~~
+	- Attributes always exist inside element
+	
+	methods:
+	- element.getAttribute(attribute_name); // retrieves attribute value if exist else null
+	- element.setAttribute(attribute_name, value); // creates attribute
+	- element.dataset.attributeName = value; // dataset attribute introduced in HTML5
+	
+		* In HTML5, can create custom attribute by using data-<attribute_name>
+		- known as dataset properties
+			eg. <li data-year = "1994">
+			
+			let li = main.querySelector("ul li");
+			li.dataset.year; // same function as line above
+	
+	eg.
+	let main = document.querySelector(".main");
+	
+	main.getAttribute("id");
+	main.getAttribute("class");
+	main.getAttribute("title"); // null if no such attribute
+	
+	main.setAttribute("title", "my movies");
+	
+
+
+	
+	let li = main.querySelector("ul li");
+	li.getAttribute("data-year"); // data-year a valid custom attribute
+	li.dataset.year; // same function as line above
+	
+~~ 8 Intro to XML ~~
+	- refer to XML_Essential_trg for in-depth info
+
+~~ 9 Intro to JSON ~~
+	- refer to JSON_Essential_Trg for in-depth info
+
+	
+	
+~~ 11 Styling Webpage with JS ~~
+	- CSS should be the primary way to style webpage
+	- JS styling is for dynamic styling (interactivity)
+		- toggle between classes
+		- modify small part of webpage
+	
+	methods:
+	
+	- element.className = "className" // modifies the class property of an element
+		- // class not used because class is keyword. Therefore, use className
+		
+	- element.id = "newID"; // assigns the id attribute with "newID" value
+	- element.title = "newTitle"; // assigns title attribute with "newTitle" value
+	- element.classList.add() // add more classes to existing class
+	- element.classList.remove() // removes specified class from element
+	- element.classList.toggle() // typically used with events
+		- if class exist, then remove. if not exist, then add.
+		
+	- element.style.propName = value // working with single property of css
+		- propName written with camel case. In CSS, written with -
+			- CSS: background-color: "red";
+			- JS: foot.style.backgroundColor = "red";
+			
+		- eg: 
+			- let foot = document.querySelector("#foot");
+			- foot.style.backgroundColor = "red";
+	- element.style.cssText = "" // working with multiple properties of CSS
+		- eg:
+			- foot.style.cssText = "
+				font-family: sans-serif;
+				letter-spacing: 5px;
+				";
+				
+	- window.getComputedStyle(element) // find out what style properties are applied to element
+		- not used as often but has its usefulness
+		- eg:
+
+			- let style = window.getComputedStyle(foot);
+			- console.log(style.cssText);
+			- console.log(style.item(0)); // property 1 of element
+			- style.getPropertyValue("color");
+				- removePropertyValue()
+				- setPropertyValue()
+
+	eg.
+	let main = document.querySelector("#main");
+	let foot = document.querySelector("#foot p");
+	
+	main.className = "class1 class2"; // multiple class possible (both applied)
+	
+	foot.classList.add("class1"); // adds class1 to already existing class in foot
+	foot.classList.remove("class2");
+	
+	foot.classList.toggle("class2"); //add if not there, else remove (toggle on off)
+	
+
+~~ 12 DOM Manipulation with Document Fragments ~~
+	Bad approach:
+		- For every iteration of forEach, the HTML is updated & reloaded 
+	
+		let movies = ["movie1", "movie2", "movie3"];
+		let movieList = document.getElementById("movies");
+		
+		movies.forEach(function(movie) {
+			let li = document.createElement("li");
+			li.textContent = movie;
+			movieList.appendChild(li);
+		})
+	
+	Good approach: Using document fragment
+		let df = new DocumentFragment(); // DocumentFragment empty container used to hold temporary HTML
+		
+		movies.forEach(movie => {
+			let li = document.createElement("li");
+			li.textContent = movie;
+			df.appendChild(li);
+		})
+		
+		movieList.appendChild(df); // updates page only once
+		
+		
+		
+		
+~~ EVENT HANDLING IN JS  ~~
+
+~~ 1 Event Handler vs Event Listener ~~
+	- Can handle events either using:
+		1) Event Handler
+			- can only have 1 handler for each event
+			- if 2 handler specified for same event, 2nd overwrite first
+		
+		eg:
+		const button = document.querySelector(".btn");
+		
+		button.onclick = () => {
+			console.log("button clicked");
+		}
+		
+		
+		2) Event Listener (Listen for event & triggered when event occurs)
+			- can have multiple listeners of same event, both occurs together
+		
+		eg:
+		const button = document.querySelector(".btn");
+		
+		button.addEventListener("click", () => ({
+			console.log("button clicked");
+		});
+		
+	# Thus, Event Listeners preferred over Event handlers
+
+~~ 40 JS Event Listeners ~~
+	- often used in web app / mobile app (event-driven programming language)
+	- waiting for events to happen (eg. Waiting for user to click on something)
+	
+	basic syntax:
+	
+	object.addEventListener(event, function, useCapture);
+	(object) : element (div | class | button | img | tag name etc.)
+	(event) : defined by JS (click | load | blur | focus | mouseDown | mouseUp etc.)
+	(function) : user defined function to perform action
+	(useCapture) : (capture is for parent / ancestor element move down to child)
+		- essentially opposite of bubbling
+		- {capture: false} // use bubbling (upwards)
+		- {capture: true} // use capturing (downwards)
+		* All parent / grandparent must have {capture: true} for capturing to occur.
+			- else, will only consider those capture:true then begin with bubbling
+	
+	myDiv.addEventListener("click", doSomething); // not passing in doSomething()!
+	
+	function doSomething(ev) { // event object passed from addEventListener fn
+		console.log(ev.type) // prints the type of event take took place (click in this case)
+		console.log(ev.target) // prints the type of HTML that event occurred on
+			- eg if have 6 clickable HTML elements, can identify which element was clicked
+	}
+	
+	working eg:
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8">
+			<meta http-equiv="X-UA-Compatible" content="IE=edge">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<title>Events</title>
+		</head>
+		<body>
+			<p >
+				<button id = "btn"> Button </button>
+			</p>
+
+			<p>
+				<a href = "https://www.google.com" id = "lnk">Google</a>
+			</p>
+
+			<p>
+				<input type = "text" id = "txt"/>
+			</p>
+
+				<script src = "script.js" type = "module"></script>
+		</body>
+	</html>
+	
+	In JS:
+	
+		let btn = document.getElementById("btn");
+		let lnk = document.getElementById("lnk");
+		let txt = document.getElementById("txt");
+		
+		btn.addEventListener("click", buttonClicked);
+		function buttonClicked(ev) {
+			console.log(ev.type, ev.target, ev.currentTarget);
+			// target: element that triggered the event (eg. user clicked on)
+			// currentTarget: element event listener is attached to
+		}
+		
+		lnk.addEventListener("click", linkClicked);
+		function linkClicked(ev) {
+			ev.preventDefault(); // prevent anchor tag from bringing user to desired link
+			console.log(ev.type, ev.target, ev.currentTarget);
+		}
+		
+		txt.addEventListener("input", ev => { // "input" event, every change in textbox triggers it
+			console.log( ev. type, ev.target, ev.target.value);
+		})
+		
+		txt.addEventListener("change", ev => { // whenever there is a change and clicked away, trigger it
+			console.log( ev. type, ev.target, ev.target.value);
+		})
+		
+		txt.addEventListener("blur", ev => {
+			console.log( ev. type, ev.target, ev.target.value);
+		})
+		
+~~ 41 Event Bubbling & Propagation ~~
+	* To prevent bubbling: use .stopPropagation() / .stopImmediatePropagation()
+	- Another important component of event listening in JS
+	- when nested HTML element is clicked, event is bubbled upwards to parent element
+	eg.
+		<style>
+		
+		</style>
+	
+		<main id = "m">
+			<div id = "d">
+				<p id = "p">
+					<span id = "s"> </span>
+				</p>
+			</div>
+		</main>
+		
+	- when span content clicked, the event is bubbled upwards to p, d and m.
+	
+	let m = document.getElementById("m");
+	let d = document.getElementById("d");
+	let p = document.getElementById("p");
+	let s = document.getElementById("s");
+	
+	let highlight = (ev) => {
+		let target = ev.currentTarget;
+		target.className = "gold";
+	}
+	
+	d.addEventListener("click", (ev) => {
+		
+		ev.stopImmediatePropagation(); // prevent parent + any other (similar) handlers from executing (eg another "click" event handler function)
+		ev.stopPropagation(); // prevent parent handlers execution (prevent bubbling)
+		console.log("div clicked");
+	});
+	
+	// if s, p or d clicked, event listener will trigger (due to event bubbling upwards)
+		- if m clicked, nothing happens because its the outermost element
+
+~~ 42 Keyboard Events ~~
+	Keyboard events: keydown  | keyup (release) | keypress (down & up)
+	Mouse events: mousedown | mouseup | click
+
+	<head>
+			<style>
+			p {
+				outline: 1px solid #333;
+				margin: 2rem;
+			}
+			input{
+				margin: 2rem;
+			}
+			input:focus{
+				background:gold;
+			}
+		</style>
+	</head>
+	<body>
+		<p>
+			<input type = "text" id = "txt"/>
+		</p>
+
+			<script src = "movie.js" type = "module"></script>
+	</body>
+	
+	in JS:
+	
+	let txt = document.getElementById("txt");
+	txt.addEventListener("keydown", func_to_run); // input element bubbles up to body element
+	document.body.addEventListener("keydown", func_to_run); // anywhere in body element, register keypress
+	
+	function func_to_run(ev) {
+		let target = ev.currentTarget;
+		let tag = target.tagName; // tagName = "INPUT" in this eg.
+		let char = ev.char || ev.charCode || ev.which;
+		let s = String.fromCharCode(char);
+		console.log(s, char, tag);
+	}
+	
+	
+	
+~~ Event Listeners in 18 minutes (Web Dev Simplified) ~~
+	- addEventListener(event, callback_function, {capture:false}) // capture default is false
+
+	const grandparent = document.querySelector(".grandparent")
+	const parent = document.querySelector(".parent")
+	const child = document.querySelector(".child")
+	
+	grandparent.addEventListener("click", e => {
+		
+	}, {capture: true, // use capture instead of bubble, 
+		once: true // run only once 
+	})
+	
+	-- Event bubbling (up)--
+		- Event on child propagating to parent / grandparent / ancestor
+		
+	-- Event capturing (down)--
+		- Event on ancestor / parent propagating to child
+		
+	-- Removing event listener after some time --
+	
+		parent.addEventListener("click", sayHi);
+
+		function sayHi() {
+			console.log("Hi");
+		}
+		
+		setTimeout(() => {
+			parent.removeEventListener("click", sayHi)
+		}, 2000);
+		
+	-- Adding event listener to specific elements dynamically --
+		
+		const divs = document.querySelector("div");
+		
+		document.addEventListener("click", e => {
+			if (e.target.matches("div") {
+				console.log("adds event to div created later")
+			})
+		});
+	
+	
+	
+~~ JavaScript Event Types ~~
+
+	1) User Interface Events (Interaction with browser window)
+	
+		- load: fires when webpage finish loading (img, script, objects applicable)
+		- unload: fires just before user leave page (new page requested)
+		- error: fires when browser encounter JS error
+		- resize: fires when resize browser window (repeatedly, may slow webpage)
+		- scroll: fires when user scrolls up/down
+		
+	2) Focus & Blur Events (when gain/lose focus, typically in forms)
+		* to show tips/feedbacks to user when interacting with form
+		* Trigger form validation when user submit
+		
+		- focus: fires when DOM node gains focus
+		- blur: fires when DOM node lose focus
+		- focusin: same as focus
+		- focusout: same as blur
+		
+	3) Mouse Events (mouse moves / user clicks button) (work differently on touchscreen device)
+	
+		- click: fires when user clicks primary mouse button / "enter" key when in focus
+			- single tap on screen for touchscreen
+		- dblclick: fires when user double click primary mouse button in quick succession twice
+			- double tap on screen for touchscreen
+		- mousedown: fires when user clicks down on any mouse button
+			- "touchstart" event for touchscreen
+		- mouseup: fires when user release mouse button
+			- "touchend" event for touchscreen
+		- mouseover: fires when user moves cursor inside element
+		- mouseout: fires when cursor moves off element
+		- mousemove: fires when user moves cursor around
+	
+	4) Keyboard events (fire when user interacts with keyboard)
+	
+		- input: fires when <input> or <textarea> value changes
+		- keydown: fires when user presses any key in keyboard (if hold down, fire repeatedly)
+		- keypress: fires when user presses a key that results in printing of char on screen
+			- fires repeatedly if user hold down (will not fire for tab | enter | arrowkeys)
+		- keyup: fires when user releases a key on keyboard
+	
+	5) Form events (while using forms on webpage)
+	
+		- submit: fires when user submits form
+		- change: fires when status of form elements change
+		- input: same as keyboard input event
+		
+	6) Mutation Events & Observers
+		Mutation: When structure of DOM tree changes
+			- addition / removal of DOM node
+		
+		* may cause page to become slow / unresponsive.
+		* may also trigger other events which lead to more mutation firing (cycle)
+		
+		- DOMNodeInserted: fires when script inserts new node into DOM
+			- appendChild()
+			- replaceChild()
+			- insertBefore() etc.
+			
+		- DOMNodeRemoved: fires when script removes existing node from tree
+			- removeChild()
+			- replaceChild() etc.
+			
+		- DOMSubtreeModified: fires when structure of DOM tree changes
+			- DOMNodeInserted / DOMNodeRemoved occurs
+		
+		- DOMNodeInsertedIntoDocument: 
+			- fires when script inserts node into DOM tree as descendent of another node already existing
+		
+		- DOMNodeRemovedFromDocument:
+			- fires when script removes descendent node from DOM tree of another node already in document
+	
+	7) HTML5 Events (page-level events) (3 most common here, exist others)
+		- DOMContentLoaded: fires when DOM tree forms (attach to window / document object)
+		- hashchange: fires when URL hash changes without refreshing entire window
+		- beforeunload: fires just before page unloads (alert user when changes not saved)
+		
+	8) CSS Events (script encounters CSS element)
+		- transitionend: fires when CSS transition ends in program
+		- animationstart: fires when CSS animation starts in progrma
+		- animationiteration: fires when any CSS animation repeats itself
+		- animationend: fires when CSS animation comes to an end
+		
+		
+	
+	
+
+		
+		

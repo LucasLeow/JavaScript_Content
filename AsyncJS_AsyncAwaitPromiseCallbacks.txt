@@ -1,0 +1,134 @@
+-- What is Asynchronous JS? --
+
+	- Break down large project into smaller tasks
+	- 3 connection concepts: (to connect smaller tasks together)
+		- Callbacks
+		- Promises
+		- Async / Await
+		
+-- Synchronous vs Asynchronous --
+
+	Synchronous:
+		- Given task 1 to task 10
+		- Only have 1 hand
+		- Can only do task 1 to 10 sequentially, 1 by 1
+		
+	Asynchronous:
+		- Given 10 tasks & 10 hands
+		- Each hand perform 1 task, all at the same time
+		
+
+-- Using Asynchronous JS --
+	- Can be used with setTimeout & setInterval functions
+	
+	eg: setTimeout(fn_to_run, 1000, values_passed_to_fn_to_run) 
+	
+		setTimeout((a,b) => {
+			console.log(a, b);
+		}, 1000, 5, 10);
+		
+		
+		Synchronous implementation:
+		
+			console.log("Task 1");
+			console.log("Task 2");
+			console.log("Task 3");
+			console.log("Task 4");
+			console.log("Task 5");
+			
+		Asynchronous Implementation:
+			setTimeout(() => {
+				console.log("Task 1");
+			}, 1000);
+			
+			setTimeout(() => {
+				console.log("Task 2");
+			}, 1000);
+			
+			setTimeout(() => {
+				console.log("Task 3");
+			}, 1000);
+			
+			setTimeout(() => {
+				console.log("Task 4");
+			}, 1000);
+			
+			setTimeout(() => {
+				console.log("Task 5");
+			}, 1000);
+		
+		
+-- Callbacks --
+	- Calling a function inside another function
+	- forms connection between functions
+	
+	function one(call_two) {
+		console.log("Step 1 complete.");
+		call_two();
+	}
+	
+	function two() {
+		console.log("Performing step 2");
+	}
+	
+	one(two);
+	
+Ice Cream Example with Callback
+	1) Get ice-cream order from customer
+	2) Fetch ingredients
+	3) Start making ice cream
+	4) Serve customer
+	
+	
+-- Callback hell --
+	- A series of nested callbacks, especially when using setTimeout
+	
+	eg.
+	
+	
+	let stocks = {
+	  fruits: ["strawberry", "grapes", "banana", "apple"],
+	  liquid: ["water", "ice"],
+	  holder: ["cone", "cup", "stick"],
+	  toppings: ["chocolate", "peanuts"]
+	};
+
+let order = (fruit_idx, call_production) => {
+	  setTimeout(() => {
+		console.log(`${stocks.fruits[fruit_idx]} was selected`);
+		call_production();
+	  }, 2000);
+	};
+
+let production = () =>{
+
+  setTimeout(()=>{
+    console.log("production has started")
+    setTimeout(()=>{
+      console.log("The fruit has been chopped")
+      setTimeout(()=>{
+        console.log(`${stocks.liquid[0]} and ${stocks.liquid[1]} Added`)
+        setTimeout(()=>{
+          console.log("start the machine")
+          setTimeout(()=>{
+            console.log(`Ice cream placed on ${stocks.holder[1]}`)
+            setTimeout(()=>{
+              console.log(`${stocks.toppings[0]} as toppings`)
+              setTimeout(()=>{
+                console.log("serve Ice cream")
+              },2000)
+            },3000)
+          },2000)
+        },1000)
+      },1000)
+    },2000)
+  },0000)
+
+};
+
+
+order(0,production);
+	
+	
+	
+	
