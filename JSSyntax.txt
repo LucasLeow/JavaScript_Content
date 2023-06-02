@@ -1079,3 +1079,33 @@ JAVASCRIPT BY STEVE GRIFFIN
 	
 	Usage:
 		- can use this.property to access certain parameters based on what this is referencing to
+
+-- 57 call(), apply(), bind() methods --
+
+	- methods that can be called when dealing with functions
+	
+	let bob = function(num, msg) {
+		console.log(this, num, msg);
+	}
+	
+	let tom = function(arr) {
+		console.log(arr);
+	}
+	
+	
+	let bill = {
+		name: "Lucas",
+		movie: "Movie1",
+		myMethod: function(fn) {
+			fn();
+		}
+	};
+	
+	bob.call(bill, 2, "Hello");
+		- first argument (bill) will be passed as context to function
+		- in function bob, this points to -> bill object
+		
+	bob.apply(bill, [3, "Bye"]);
+		- first argument pass as context
+		- 2nd argument must be array, but works similar to .call(). Just that all must be in array
+	
