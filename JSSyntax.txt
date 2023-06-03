@@ -1083,6 +1083,19 @@ JAVASCRIPT BY STEVE GRIFFIN
 -- 57 call(), apply(), bind() methods --
 
 	- methods that can be called when dealing with functions
+	* arguments[i] : built-in keyword to access arguments passed into a function
+		eg:
+		
+				let test = {
+				 myMethod: function(args) {
+				   arg1 = arguments[0];
+				   arg2 = arguments[1];
+				   console.log(arg1, arg2);
+				 } 
+				}
+
+				test.myMethod(1,2);
+	
 	
 	let bob = function(num, msg) {
 		console.log(this, num, msg);
@@ -1108,4 +1121,6 @@ JAVASCRIPT BY STEVE GRIFFIN
 	bob.apply(bill, [3, "Bye"]);
 		- first argument pass as context
 		- 2nd argument must be array, but works similar to .call(). Just that all must be in array
+		
+	bill.myMethod()
 	

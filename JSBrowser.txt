@@ -535,6 +535,7 @@ URL : Uniform Resource Locater
 	
 	
 ~~ JavaScript Event Types ~~
+	- utilizes JS addEventListener(<Event>) fn
 
 	1) User Interface Events (Interaction with browser window)
 	
@@ -618,6 +619,26 @@ URL : Uniform Resource Locater
 		- animationend: fires when CSS animation comes to an end
 		
 		
+		
+~~ Javascript HTML Events ~~
+	- Almost like Event listeners
+	- Applied in HTML tags instead of using JS addEventListener(<Event>) fn
+		- embedded in HTML tags
+	eg.
+	
+	<button onclick="document.getElementById("demo").innerHTML=Data()"> Get Time </button>
+	
+	<button onclick="displayDate()"> Get Time </button>
+		- Allows for multi-line code in external function
+	
+	
+	Common HTML events:
+		- onchange : any changes in html elements
+		- onclick : user click html element
+		- onmouseover : user moves mouse over HTML element
+		- onmouseout : user moves mouse away from HTML element
+		- onkeydown : user pushes a keyboard key
+		- onload : browser finished loading page
 	
 	
 

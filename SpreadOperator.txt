@@ -1,0 +1,45 @@
+Spread operator
+	- "..." operator
+	
+3 places that can utilize spread operator:
+
+	1) In function calls
+	2) In array literals
+		- when making new array
+	3) In object literals
+		- when making object
+		
+
+-- 1 ... inside Function Call --
+
+	const temperatures = [85, 32, 42, 24, 75, 45]
+	
+	Math.min(temperatures) // = NaN;
+		- fn seeing temperatures as an entire array
+		
+	Math.min(...temperatures) // return 24
+		- ... spreads all the elements within array into fn
+		
+	previously was:
+	Math.min.apply(null, temperatures);
+	
+	console.log(temperatures) // [85, 32, 42, 24, 75, 45]
+	console.log(...temperatures) // 85 32 42 24 75 45
+	
+	console.log("Bananas") // Bananas
+	console.log(..."Bananas") // B a n a n a s
+	
+	
+-- 2 ... in array literals -- 
+	- More commonly used
+	- take data in existing array to create new arrays
+	* does not perform deep copy of nested arrays
+	
+	let arr1 = [1, 2];
+	let arr2 = [3, 4, 5];
+	
+	const combined = [...arr1, ...arr2]
+	
+	const copy1 = [...arr1]
+
+-- 3 ... in object literals --
