@@ -1,0 +1,142 @@
+-- 1 What is AJAX --
+
+	- AJAX = Asynchronous JS & XML
+	
+
+	== Typical use case ==
+	
+		- JS make request to retrieve data from specified URL
+		
+		- data received not necessary for replacing entire webpage content
+			- can choose desired data to be replaced
+			
+			
+	== History of AJAX ==
+		- Google maps started using AJAX
+		- Divide map into smaller tiles
+		- only needed to load tiles that changed
+		
+
+
+	New version AJAX: (2014)
+	
+	fetch(uri)
+	.then((res) => {
+		return res.json();
+	})
+	.then((data) => {
+		console.log(data);
+	})
+	.catch((err)=>{
+		console.log(err.message);
+	})
+	
+	Asynchronous Request
+		- User can continue browsing webpage while request made
+		- if synchronous (blocking request), user cannot do anything while fetching request
+	
+
+
+
+
+-- 2 ES6 Promises --
+	
+	- Promises:
+	
+		- wrapper around any asynchronous tasks
+		- Promises to be used when dealing with the following tasks:
+		
+			- AJAX calls (fetch data from server)
+			- reading files
+			- timeouts
+			- geolocation
+			- database communication
+			- anything with callback function (to prevent callback hell)
+			
+		- used in scenario when unsure when data will be received
+			- can perform other task while awaiting response
+			
+		
+		- Whenever Promise created, 2 functions is sent as arguments
+			1) "resolve" function
+			2) "reject" function
+			
+			- Only 1 of the function will get executed
+				- If successful, "resolve" function will be executed
+				- If unsuccessful, "reject" function will be executed
+			
+			- if resolve() function called, .then() will be executed & chained (if desired)
+			- if reject() function called, .catch() will be executed
+				- if any error between .then(), .catch() will also execute
+			
+			- .then() takes 1 argument (response)
+				- value of response is whatever is passed in the resolve()
+			- .catch() takes 1 argument (error)
+			
+			- .then() chaining: 
+				- The return from previous .then() will be passed as argument in next .then()
+
+	eg:
+	
+		let p1 = new Promise((resolve, reject) => {
+			let x = 5;
+			resolve(x); // pass x to (response) of .then() function
+		});
+		
+		p1.then((response) => { 
+			console.log(response); // value will be 5, passed from resolve()
+			return response;
+		})
+		.then((response_2) => {
+			console.log(response_2);
+		})
+		.catch((err) => { // runs if reject called or error in between thens
+			console.log(err);
+		})
+		
+	- Any functions that returns Promise can use .then() & .catch()
+	
+	
+
+
+
+
+-- 3 fetch() fundamentals in AJAX --
+
+
+	* To use fetch()
+	
+		1) npm init -y in desired folder
+		2) add "type":"module" in package.json
+		3) npm install node-fetch
+		4) import fetch from "node-fetch";
+	
+	- fetch : Making HTTP request
+		- typically fetching resource from provided URL
+		- returns the data as response (can be handled using .then())
+		
+		
+	eg:
+		// if id > 10, causes error
+		
+		import fetch from "node-fetch";
+
+		const root = "http://jsonplaceholder.typicode.com";
+		let id = Math.floor(Math.random() * 20) + 1; //id between 1 to 20
+
+		let uri = root + '/users/' + id;
+
+		console.log(uri);
+
+		fetch(uri)
+		.then((response) => {
+			if (response.status==200) {
+				return response.json();
+			} else{
+				throw new Error("Invalid user ID");
+			}
+		})
+		.then((response)=>console.log(response))
+		.catch((err) => {
+			console.log(err.message);
+		})
