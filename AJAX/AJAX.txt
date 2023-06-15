@@ -140,3 +140,27 @@
 		.catch((err) => {
 			console.log(err.message);
 		})
+		
+
+-- 4 Fetch with Request & Headers Objects --
+
+	Request Object:
+	
+		- let req = new Request(uri); // simplest form
+		
+		- let req = new Request(uri, options);
+			- options (4 common) : HTTP_method | headers | body | mode 
+			- HTTP_method : "GET" | "PUT" | "POST" | "DELETE" 
+				- GET: requesting data, received data automatically cached
+				- POST: data sent to server to update info (need uuid to identify)
+				- PUT: insert new data to server 
+				- DELETE: sending parameter to delete certain things (need uuid to identify)
+			
+			eg:
+			
+			let req = new Request(uri, {
+				
+			});
+		
+	
+	fetch(req)
