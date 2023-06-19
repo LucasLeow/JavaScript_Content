@@ -204,38 +204,38 @@
 					- cross-origin resource sharing (allows restricted resource to be accessed)
 			
 			eg:
-			
-				import {Headers, Request} from "node-fetch";
-				import fetch from "node-fetch";
 
-				const root = "http://jsonplaceholder.typicode.com";
-				let id = Math.floor(Math.random() * 20) + 1; //id between 1 to 20
+					import {Headers, Request} from "node-fetch";
+					import fetch from "node-fetch";
 
-				let uri = root + '/users/' + id;
+					const root = "http://jsonplaceholder.typicode.com";
+					let id = Math.floor(Math.random() * 20) + 1; //id between 1 to 20
 
-				let h = new Headers();
-				h.append('Accept', 'application/json');
+					let uri = root + '/users/' + id;
 
-				let req = new Request(uri, {
-					method: "GET",
-					headers: h,
-					mode:"cors"
-				});
+					let h = new Headers();
+					h.append('Accept', 'application/json');
 
-				fetch(req)
-				.then((response)=>{
-					if (response.ok) { // ok means status 200 (success) or status 300 (cached)
-						return response.json()
-					} else {
-						throw new Error("Failed to retrieve json data");
-					}
-				})
-				.then((response_json)=> {
-					console.log(response_json);
-				})
-				.catch((err)=>{
-					console.log("Error caught: ", err.message);
-				})
+					let req = new Request(uri, {
+						method: "GET",
+						headers: h,
+						mode:"cors"
+					});
+
+					fetch(req)
+					.then((response)=>{
+						if (response.ok) { // ok means status 200 (success) or status 300 (cached)
+							return response.json()
+						} else {
+							throw new Error("Failed to retrieve json data");
+						}
+					})
+					.then((response_json)=> {
+						console.log(response_json);
+					})
+					.catch((err)=>{
+						console.log("Error caught: ", err.message);
+					})
 
 
 
@@ -262,7 +262,7 @@
 			
 			
 		eg.
-		
+			
 				import {FormData, Request} from "node-fetch";
 				import fetch from "node-fetch";
 
@@ -298,4 +298,35 @@
 				});
 
 	
+	
+== 6 ES6 Promises methods ==
+	- Different ways of initializing Promise object
+	
+		let p1 = new Promise((resolve, reject) => {
+			if (true) {
+				resolve("p1 resolved");
+			} else {
+				reject("p1 rejected");
+			}
+		})
+		
+		let p2 = Promise.resolve("p2 resolved");
+		
+		let p3 = () => Promise.reject(null);
+		
+		p1.then((result) => {
+			console.log(result);
+		})
+		
+		p2.then((result) => {
+			console.log(result);
+		})
+		
+		p3().then((res) => {
+			console.log(res);
+		})
+		.catch((err) => {
+			console.log(err.message);
+		})
+
 	
