@@ -329,4 +329,43 @@
 			console.log(err.message);
 		})
 
+
+== 7 Promises all method ==
+	- to check several promises
+	- executes next action only after all promises are resolved
 	
+	
+		let allClear = Promise.all([p1, p2, p3]);
+		
+		allClear.then((arr_results)=> {
+			console.log(arr_results[0]);
+			console.log(arr_results[1]);
+			console.log(arr_results[2]);
+		})
+	
+
+== 8 Promise race method ==
+
+	- Send out several promises
+	- so long as 1 promise resolves / rejects , will execute next action
+	- order in the array matters.
+		- if p1 fails, catch will be called
+		- if p1 succeeds, .then will be called
+		
+	- in real world scenario (eg AJAX calls)
+		- unsure when the response will be received
+		- can use .race() method to handle whichever response received first
+	
+		let p1 = Promise.reject(111);
+		let p2 = Promise.resolve(222);
+		let p3 = new Promise((resolve, reject) => {
+			setTimeout(resolve, 1000, 333);
+		}
+		
+		let execute = Promise.race([p1, p2, p3]);
+		execute.then((winning_result) => {
+			console.log(winning_result);
+		})
+		.catch((err) => {
+			console.log(err.message);
+		})
