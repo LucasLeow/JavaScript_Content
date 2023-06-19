@@ -1,21 +1,33 @@
+import {FormData, Request} from "node-fetch";
 import fetch from "node-fetch";
 
-const root = "http://jsonplaceholder.typicode.com";
-let id = Math.floor(Math.random() * 20) + 1; //id between 1 to 20
+const root = 'http://jsonplaceholder.typicode.com/';
+let uri = root + 'posts';
 
-let uri = root + '/users/' + id;
+let form_data = new FormData();
+form_data.append("userId", 3);
+form_data.append("title", 'Title Created');
+form_data.append('body', 'Content Created')
 
-console.log(uri);
+let options = {
+    method: 'POST',
+    mode: 'cors',
+    body: form_data
+}
 
-fetch(uri)
-.then((response) => {
-    if (response.status==200) {
-        return response.json();
-    } else{
-        throw new Error("Invalid user ID");
+let req = new Request(uri, options);
+
+fetch(req)
+.then((resp) => {
+    if (resp.ok) {
+        return resp.json();
+    } else {
+        throw new Error("POST fail");
     }
 })
-.then((response)=>console.log(response))
-.catch((err) => {
-    console.log(err.message);
+.then((json_resp) => {
+    console.log(json_resp);
 })
+.catch((err) => {
+    console.log("Error caught: ", err.message);
+});
