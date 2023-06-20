@@ -1,0 +1,77 @@
+Hyper Text Transfer Protocol (HTTP)
+    - most popular online communication protocol
+	
+	
+	Internet Protocol:
+		- set of rules for routing & addressing packets of data
+		
+
+== Crux of HTTP ==
+	- Request - Response system
+	
+		- HTTP Lifecycle (Request - Response pair) 
+			- Client makes HTTP Request
+			- Server respond with website (Web Server)
+	
+	- Requesting computer : Client
+	- Response computer : Server (Also a computer)
+		- Web Server
+		- Database Server
+		- e-mail Server
+		- Web Proxy Server
+		- DNS Server
+		- FTP Server
+		- File Server
+		- DHCP Server
+		
+		
+== Uniform Resource Locator (URL) ==
+
+	- address of another computer on internet
+		- part of it gives the direction
+		- part of it tells server what we want
+		
+	- URLs not specific to HTTP protocol
+		- those using HTTP protocol will use http prefix
+		
+	- Other protocols also uses URL
+	
+	
+	
+== Look at Client & Server ==
+
+	- Client : Front-End
+		- What the user see (user interface) (may not always be the case)
+		- sends request to back-end to retrieve desired info
+		- a computer making HTTP request
+		
+	- Server : Back-End
+		- everything else that is not on front end
+		- sends response based on requested info
+			- video data
+			- comments data
+			- image data
+			- HTML data
+			- etc.
+		- A computer responding to HTTP request
+			
+	* A Server can also act as a client
+		- when the server request for info from other servers
+		
+	
+== JS fetch API ==
+
+	- A set of built-in functions to make HTTP requests
+	
+	HTTP Requests
+		- URL
+		- Headers
+		- Body
+		
+	eg:
+		
+		const response = await fetch(url, settings);
+		
+			- await: to wait for response from server
+				- async JS, whereby other part of code continue to execute
+				- while waiting for response whenever await is utilized

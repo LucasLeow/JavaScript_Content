@@ -1,6 +1,0 @@
-Hyper Text Transfer Protocol (HTTP)
-    - most popular protocol for online communication
-	
-	
-	Protocol:
-		- 
