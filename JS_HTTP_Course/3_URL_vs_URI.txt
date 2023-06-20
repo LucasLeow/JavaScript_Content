@@ -1,0 +1,135 @@
+== Uniform Resource Identifiers (URI) ==
+	- superset of URL
+		- URI
+			- URLs
+			- URNs
+			
+	- unique character sequence that identifies a resource
+	
+		* All URLs are URI
+		* Not all URIs are URLs
+		
+		
+	eg URL breakdown (8 parts):
+		* Only protocol & domain name are compulsory
+			- other parts are optional
+	
+		http://testuser:testpass@testdomain.com:8080/testpath?testsearch=testvalue#testhash
+		
+		- http : (protocol)
+			- protocol is compulsory (cannot omit)
+		
+		- testuser:testpass : (username & password, typically when accessing database)
+			- username & passwords are completely optional
+			- not commonly seen in web browser URL
+			- user & pass is entered in front-end, not via URL
+			- ':' acts as a delimiter
+			- '@' added only if user & password included in URL
+				- separates user & password from domain host name
+				
+		- testdomain.com
+			- Domain Name (linked to IP Address of desired resource)
+			
+			
+		- :8080
+			- not compulsory
+			- if unprovided, uses convention default values
+			- typically used in local development
+			- port used to access info
+			
+			http : port 80 is default 
+			https : port 443 is default
+			
+			- not typically specified in Browser URL since it always uses default
+			
+		- /testpath : to serve a different webpage than the index.html
+			- default is '/' (known as root)
+			- can be nested
+			- eg: /testpath/page1/contactinfo
+			
+		- ?testsearch=testvalue : query parameters / search parameters
+			- optional
+			- key value pairs
+			- starts with '?'
+			
+		- #testhash : hash / fragment
+			- optional
+			- to link to specific section on page
+			
+			
+			let urlString = http://testuser:testpass@testdomain.com:8080/testpath?testsearch=testvalue#testhash;
+			const urlObj = new URL(urlString);
+			
+			console.log(urlObj.protocol);
+				.username
+				.password
+				.hostname
+				.port
+				.pathname
+				.search
+				.hash
+			
+			
+			
+== Some URL Protocols ==
+	- http
+	- ftp
+	- mailto
+	- https
+	
+	* not all schemes require "//" like http://
+	
+	eg:
+		http://example.com
+		mailto:noreply@fantasyquest.app
+		
+
+== Ports ==
+	- number assigned to uniquely identify a connection endpoint
+	- to direct data to specific service
+	- Allow to segment incoming data streams
+	
+	- allow 1 server to run different softwares
+		- develop multiple websites on different ports
+		- up to 65000 ports possible
+	
+	
+	* Cannot run multiple software on single port!
+	
+	eg:
+		Server contains
+			- Web Server (port 80)
+			- Database Server (port 543)
+			
+	- If no port specified in URL, default is used
+		- default based on protocol
+		
+		
+		
+Default entry point for root ("/") is index.html
+	- based on different frameworks, can configure the root
+
+			
+
+== More about Query Parameters ==
+	- Changes in path /users | /locations typically changes entire webpage served
+		- query parameter typically changes something small
+			- to target specific data received
+			- options to receive certain data (date range etc.)
+			
+	- '?' as delimiter to separate query params from URL
+	- if multiple params, separated with '&'
+	- not compulsory in URL
+	
+	eg:
+		https://www.google.com/search?q=hello+world&filter=7
+		
+		path: /search
+		query param 1: ?q=hello+world
+		query param 2: &filter=7
+		
+			key 1:  q
+			value 1: hello world
+			
+			key 2: filter
+			value 2: 7
