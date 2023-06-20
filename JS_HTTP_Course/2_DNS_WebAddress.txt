@@ -1,0 +1,88 @@
+== Web Addresses ==
+	- There may be many devices (computers / phones) connected to internet
+	- Unique IP Address assigned to each device connected to internet
+		
+		0-255.0-255.0-255.0-255 (4 sections, 0 to 255)
+		
+	- IPv4 : separated by .
+		- 4 sections
+		- 4 billion possible combinations
+		
+	- IPv6: separated by :
+		- 6 sections
+		- 39 trillion trillion trillion possible combinations
+		
+		
+== DNS : Domain Name System ==
+	- To map IP addresses to names
+	- easier to memorize
+	- if amazon change IP address, doesn't matter
+		- can just map new IP address to same Domain name
+	
+	- eg: www.google.com is easier to memorize than google's ip address
+	
+	- "phonebook" of internet
+		- Managed by "ICANN" organization
+		- contacts ICANN root name servers to map domain name to IP Address
+		- built-in to computer network configuration
+	
+	
+	
+	
+	** 2 steps when sending HTTP Request
+		1) Resolve DNS
+			- When Domain name entered, request send to DNS Server
+				- DNS Server will search for corresponding IP address & send back
+		
+		2) Send Request to actual IP address
+			- use the IP address from DNS Server to send actual request
+			
+			
+== Domain Name & URLs ==
+
+	* Domain Name is just part of an URL
+
+	https://en.wikipedia.org/wiki/Miniature_pig
+	
+		domain name portion: en.wikipedia.org
+			- converts to a specific IP address
+			
+			
+			return response.Answer[0].data
+			
+			
+	Steps to deploy website to internet 
+		1) Need web server software & web files to serve
+		2) Create server & host website files
+			- nowadays, cloud used to serve files
+			- when set up, cloud will provide the cloud server IP
+			
+		3) Buy domain name (from registrar)
+			- tell the registrar desired IP address
+			
+		4) Server is now accessible via domain name
+		
+
+
+== JS URL API == (https://developer.mozilla.org/en-US/docs/Web/API/URL)
+	- built-in URL class
+	- good for parsing URL string
+	- break down into JSON
+	
+		URL string: "https://en.wikipedia.org/wiki/Miniature_pig"
+		
+		
+		
+== Subdomains ==
+	- Subdomain prefixes a domain name
+	- allow domain to route network traffic to different servers / resource
+	- don't have to buy new domain names
+	- buy top level domain & any subdomain can be created to perform actions
+	
+	
+	eg: boot.dev serves main web content
+	- api.boot.dev is the subdomain managing the API calls to boot.dev
+	- blog.boot.dev : Another subdomain that hosts the blog for boot.dev
+	
+
+		
