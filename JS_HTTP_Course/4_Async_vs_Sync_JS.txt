@@ -1,0 +1,81 @@
+== Synchronous ==	
+	- step by step (sequential)
+	- only 1 thing happening at a time
+	
+	
+== Asynchronous ==
+	- multiple things at the same time
+	- use only when needed (due to complexity)
+		- making HTTP request
+	
+	eg:
+		- render something in browser
+		- fetch something from server
+		
+		
+	- setTimeout most basic way to use Async JS
+		- but not recommended as utilizes callbacks
+		- leads to callback hell
+			
+			
+
+== Promises ==
+	- modern way of using Async 
+	- Utilize Promise Object
+		- resolve
+		- reject
+	- use .then() and .catch() to work on resolve / reject
+	
+
+== When to use Async JS? ==
+
+	- when making request to server
+	- when opening files to retrieve data
+	
+	
+	
+== I/O operations time required ==
+	- Retrieving data from RAM : nanoseconds : use sync
+	- Retrieving data from ROM : 1 ms : async if large amt of data
+	- Network (HTTP request) (location dependent) : 100 ms - 2 s : async
+	
+	
+
+== await keyword ==
+	- newer syntax with Promises to replace .then()
+	- can only work for resolve
+	- thus, if use await, need to include try {} catch () {} block 
+		- to catch reject
+	- await syntax replaces .then() . catch() concept
+	- writing async code that looks synchronous
+	
+	
+== async keyword ==
+	- replaces new Promise() syntax
+	- by using async, auto make function return a Promise
+	- resolve value will be whatever is returned from function
+	- if want to "reject", just throw new Error
+	
+	
+
+Promise .then syntax
+
+	let fetchUser = fetch(uri);
+
+	fetchUser.then((user) => {
+		return fetchLocationForUser(user);
+	})
+	.then((location) => {
+		return fetchServerForLocation(location);
+	})
+	.then((server) => {
+		console.log(`Server is ${server}`);
+	}
+
+
+async await syntax
+
+	const user = await fetchUser();
+	const location = await fetchLocationForUser(user);
+	const server = await fetchServerForLocation(location);
+	console.log(`Server is ${server}`);
