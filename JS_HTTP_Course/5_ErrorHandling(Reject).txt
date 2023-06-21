@@ -1,0 +1,80 @@
+== Error Handling ==
+
+	- important to manage errors
+	- especially when dealing with networks
+		- losing internet connection
+		- unable to fetch desired data
+		
+		
+	1) Using try-catch block
+		- A way to handle errors
+	
+	
+	try {
+		const speed = car.speed;
+	} catch (err) {
+		console.log("Error", ${err.message});
+	}
+	
+	- "err" object in catch block is whatever that is thrown during exception
+	
+	
+	
+== Bugs vs Errors ==
+	- Bugs are not Errors
+	
+	- Bugs are always bad
+	- Errors are not always bad
+	- Solution for bugs & errors differ
+	
+	
+	-- Bugs --
+		- Unexpected things happening in code
+		- eg: add(2,3) gives 7 (unexpected behaviour)
+		- Go to code & fix it
+		- Sometimes, bug may not be fixed if too costly
+		- fix bug in code (debugger / logic checking)
+		
+	-- Errors --
+		- Expected
+		- Must handle error gracefully
+		- sometimes unavoidable, cannot fix to avoid error
+			- eg: No internet connection (nth in code to get internet)
+				- only can handle error gracefully
+				
+			- Remote server is down	(No code can fix it)
+				- must handle gracefully
+				
+		- handle error in code (error handling techniques)
+		
+		
+== Error Handling (Async JS) ==
+
+
+	1) .then().catch() technique
+		- for normal Promises(resolve, reject)
+		
+	2) try-catch block using async/await:
+		- async : fn returns a Promise
+		- await : resolve
+		- For reject,
+			- either throw Error
+			- if fail to resolve means reject, so just need to catch
+		
+		
+		try {
+			const leaderboard = await fetchLeaderBoard();
+			console.log(leaderboard);
+		} catch (err) {
+			console.log(err.message);
+		}
+		
+		async function fetchLeaderBoard() {
+			const response = await fetch(URL);
+			return response.json();
+		}
+		
+	
+		
+	
+	

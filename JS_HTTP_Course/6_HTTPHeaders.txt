@@ -1,0 +1,69 @@
+== HTTP Headers == )(https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers)
+	- Allow clients & servers to pass additional info about request	
+		- provides metadata (data about data)
+	
+	- Request Headers (client)		
+	- Response Headers (server)
+	
+	
+	Example of Header Metadata:
+		- Type of browser client uses (Chrome | Firefox | Safari etc.)
+		- Operating System (Windows | Linux | MacOS)
+		- Preferred Language (en-us etc.)
+		
+		- custom headers possible
+		
+	
+	Accessing Headers Object (JS) (from Headers API)
+	(https://developer.mozilla.org/en-US/docs/Web/API/Headers)
+		- request.headers
+		- response.headers
+		
+		
+		const myHeader = new Headers();
+		
+		myHeader.append(name, value);
+		myHeader.get(name); // returns the value of <name> Header
+		
+		
+		
+		
+		
+== Purpose Of Headers ==
+	- Provide info about data
+	- Security / Authentication 
+		- don't have to include auth info. in HTTP Request body
+		
+		- X-API-Key Header for Auth info.
+			- Different users have different values for unique ident.
+			- can change value based on ID passed
+			
+			
+			
+			async function getLocationResponse(apiKey, url) {
+				const response = await fetch(url, {
+					method: "GET",
+					mode: "cors",
+					headers: {
+						'X-API-Key': apiKey,
+						'Content-type': 'application/json'
+					}
+				});
+				return response.json();
+			}
+		
+		
+
+== Status Codes ==
+	- Numeric value by default
+	- When working in code, typically parsed as strings
+	- therefore, sometimes need to cast to number to work as number
+	
+	
+		
+		
+	
+== HTTP Body ==
+	- Used to transport the data / info about request
+	
+	
