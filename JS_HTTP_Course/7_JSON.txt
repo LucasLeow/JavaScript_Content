@@ -1,0 +1,75 @@
+== Javascript Object Notation (JSON) ==
+	- text-based format for JS objects
+	- used for sending in HTTP request (data transportation)
+	- Not just used in JS
+		- supported in many programming languages
+	
+	- key-value pairs
+	- keys are always string
+	- value can be different types
+		- number
+		- string
+		- array
+		- JSON (nested)
+		
+		
+* When using fetch(), the response stream is the network response
+	- parsing raw response = binary text
+	therefore: 
+		return await response.json(); used
+		
+== Common Use Cases of JSON ==
+	1) In HTTP Request & Response bodies
+	2) As formats for textfiles : (.json)
+	3) In NoSQL databases (MongoDB | FireStore | ElasticSearch)
+	
+	
+== JSON.parse() & JSON.stringify() ==
+
+	== JSON.stringify() == 
+	
+	- converts JS Object to Text
+	- Good for sending data
+		- takes JS Object & converts to JSON
+		- Once in JSON, can be sent
+		
+	- body section of fetch() API takes in string, not JS Object
+		- need to use JSON.stringify(Obj1) then send
+		
+	== JSON.parse() ==
+		- opposite of .stringify()
+		- takes String structured as JS Object & converts into JS Object
+		- need to use try-catch block to handle any errors
+		
+			const obj = JSON.parse(json);
+			console.log(obj.title);
+		
+		
+== Useful Website for JSON ==
+https://jsonlint.com/
+	- To look at formatted JSON
+	- To validate JSON
+	
+	
+	
+== Mock Data ==
+	- using self-created JSON to test backend
+	- self-created data should be close to expected server response
+	- using POSTMAN or other endpoint testing tool
+	
+	
+	
+== Alternative to JSON ==
+	- XML (More frequent in the past until JSON emerged)
+		- more cumbersome to write (more verbose)
+			<root>
+				<id>1</id>
+				<genre>Action</genre>
+			</root>
+		
+		
+== .json() vs .parse(json) ==
+
+	.json() is async, returns a Promise that resolves to JS obj
+	.parse() is sync, converts json to JS obj
+	
