@@ -1,0 +1,155 @@
+== HTTP Methods ==
+	- compulsory to specify in every HTTP Request
+	
+	
+	
+	- Most Common HTTP Methods -
+		- GET
+			- gets data from server
+		- PUT (update entire section of resource)
+		- POST
+		- DELETE
+		
+	- Less Common Methods -
+		- CONNECT
+		- OPTIONS
+		- TRACE
+		- PATCH (update partial section of resource)
+		- HEAD
+		
+		
+- In JS, fetch API is used to handle HTTP Requests
+
+
+		options:
+			- method
+			- headers
+			- mode
+			- body	
+				- not in GET
+				- only in POST | PUT | DELETE
+					- to provide UUID / data
+					
+		== eg. (GET) ==
+	
+		const resp = await fetch(url, {
+			method: 'GET',
+			mode: 'cors',
+			headers: {
+				'sec-ch-ua-platform': 'windows',
+				'Content-Type':'application/json',
+				'X-API-Key':
+				}
+			});
+		
+		return await resp.json();
+		
+		
+		
+		== eg. (POST) == 
+		
+		const userToCreate = {
+			characterName: "Grendel",
+			class: "mage",
+			level: 1,
+			pvpEnabled: false,
+			user: {
+				name: "Allan",
+				location: "USA",
+				age: 27
+			}
+		}
+		
+		const resp = await fetch(url, {
+			method: "POST",
+			mode: "cors",
+			headers: {
+				'Content-Type': 'application/json',
+				'X-API-Key': apiKey
+			},
+			body: JSON.stringify(userToCreate)
+		});
+		
+		return await resp.json();
+		
+		
+		== eg. (PUT) ==
+		
+		async function updateUser(baseURL, id, data, apiKey) {
+			fullURL = `${baseURL}/${id}`;
+			const resp = await fetch(fullURL, {
+				method: "PUT",
+				mode: "cors",
+				headers: {
+					"Content-Type":"application/json",
+					"X-API-Key": apiKey
+				},
+				body: JSON.stringify(data)
+			} 
+			return resp.json();
+		}
+		
+		
+		== eg. (DELETE) ==
+		
+		async function deleteUser(baseURL, id, apiKey) {
+			fullURL = `${baseURL}/${id}`;
+			const resp = await fetch(fullURL, {
+				method: "DELETE",
+				mode: "cors",
+				headers: {
+					"Content-Type":"application/json",
+					"X-API-Key": apiKey
+				}
+			} 
+			return resp.json();
+		}
+		
+		
+		
+	- headers
+		- refer to MDN web docs for available keys
+		- 'X-API-Key': typically used for authentication
+		- 'Content-Type': To inform server what type of data Request is expecting
+			- Not compulsory
+		
+		
+	- mode: 'cors'
+		- cross origin resource sharing
+			- must be used in browsers
+			- so browser doesn't kill request for security reasons
+			
+			
+== CRUD ==
+
+	- Create (POST)
+	- Read (GET)
+	- Update (PUT) / PATCH
+	- Delete (DELETE)
+	
+		* Both POST & PUT can be used to create resource
+			** POST is not idempotence (Duplicates possible)
+				- meaning, it will create multiple similar resource if sent multiple times
+			** PUT is idempotence
+				- Will not create new instance if existing info there
+				
+				
+== Status Codes ==
+	- To ensure HTTP Request went well
+	
+	200s : Successes
+	300s : Redirections
+	400s : Errors
+	500s : Server Errors
+	
+	resp.status provides status code in JS
+	
+		const resp = await fetch(url, {
+			method: "GET",
+			mode: "cors",
+			headers: {
+				"X-API-Key": apiKey
+			}
+		});
+		
+		console.log(resp.status);
