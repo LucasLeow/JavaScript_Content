@@ -1,0 +1,38 @@
+HTTPS:
+    - HyperText Transfer Protocol (S)ecure
+    - utilizes encryption for:
+        - request info.
+        - response info.
+    
+- Data not direct from client to server
+- intermediary exists (ISP | public wifi | cloud etc.)
+    - if unencrypted, susceptible to man-in-middle interception
+    - only server can decrypt data sent by client
+
+
+== HTTPS Encryption ==
+    - protects content of data
+    - Does not protect identity of client / server
+        - man-in-middle able to see what website user is browsing
+    - uses digital signature to prove that you are communicating with the correct server
+
+    - 2 keys
+        - private
+            - used for decryption
+        - public
+            - used for encryption
+
+
+            1) Server generates public private key pair (only once upon init)
+            2) Client contact server (request)
+            3) Server sends public key to client
+            4) Client & Server negotiates symmetric key
+                - Client generates secret token
+                - A copy of secret token encrypted using Server's public key
+                - Encrypted secret token sent to Server
+                - Secret token decrypted using Server's private key
+
+                - Client sends encrypted request using secret token
+                - Server decrypts request using secret token
+                - Server sends encrypted response using secret token
+                - Client decrypts response using secret token
