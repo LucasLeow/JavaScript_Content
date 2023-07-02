@@ -1,0 +1,129 @@
+URL:
+    - http://testdomain.com/root/next
+
+Path:
+    - /root/next
+
+
+Modern URL for web app
+    - works slightly differently than just the path to the file
+
+    eg:
+
+        const fullURL = `https://api.boot.dev/v1/courses_rest_api/learn-http/locations`;
+
+        - https://api.boot.dev
+            - the domain to the server
+            - the ip address
+
+        Path:
+
+            - /v1 
+                - version of API
+                - if big changes to API, can change to v2 etc.
+                    - if want, can use v1 API using /v1 path
+                    - if want use new API, use /v2 path
+
+            - /courses_rest_api 
+                - to separate api used by users to api used by server to power site
+                - some sort of segregator
+
+            - /learn-http
+                - directory (in this scenario, which course does api belong to)'
+              s  - learn-http course
+
+            -/locations
+                - resource location
+                - can be other resource (users |weapons etc.)
+
+
+== RESTful APIs ==
+
+    - Representational State Transfer
+        - A set of standards & conventions for building APIs
+        - adhere to certain rules, so developers / servers know what to expect
+
+
+    Standards of RESTful APIs:
+        
+        1) Client & Server are separate & agnostic
+            - Agnostic :
+                - Client written in any language
+                - Server written in any language
+                - Both can understand with given conventions
+                    - encoding scheme / JSON as data transfer etc.
+        
+        2) Stateless
+            - Server does not need to know what state client is in
+            - Client does not need to know what state server is in
+            - Interact with resources instead of commands
+            - responsibility is for client to request specific resources
+                eg:
+
+                    - Server stores registered users
+                    - Client request info of 10 users
+                    - Server provides info of 1st 10 users
+                    - if Client request info again, Server will provide same info again
+                        - * Server will not keep track of any previous transactions
+
+            3) Paths Convention for REST
+                - path used to identify where resource is located
+                - the last part of URL denotes the resource
+                
+                eg: 
+                    - /locations
+                    - /users
+                    - /contacts
+        
+
+== Query Parameters ==
+    - initiated with ? in URL
+    - key-value pairs
+    - commonly used in GET requests in REST APIs
+
+    eg:
+        /search?q=boot.dev
+
+        key : q
+        value : boot.dev
+
+        - 'https://api.boot.dev/v1/courses_rest_api/learn-http/users?sort=level';
+            - server is performing the sort (server hardware typically stronger)
+
+
+* Refer to server API documentation to see what methods are available
+    - if no such feature:
+        - contact backend developers
+        - write own custom code to obtain desired data
+
+
+    -- Multiple Query Parameters --
+        
+        http://example.com?firstName=lane&lastName=wagner;
+
+            - '?' initiates a query parameter
+            - '&' separates individual query parameters
+
+        eg:
+
+        async function lootTreasure(baseURL, rarity) {
+            let limit = null;
+            switch(rarity) {
+                case 'Common':
+                    limit = 1;
+                    break;
+                case 'Rare':
+                    limit = 3;
+                    break;
+                case 'Legendary':
+                    limit = 5;
+                    break;
+                default:
+                    throw "bad rarity";
+            }
+
+            const fullURL = `${baseURL}?sort=quality&limit=${limit}`;
+            return await getItems(fullURL, apiKey);
+        }
+    
+            
