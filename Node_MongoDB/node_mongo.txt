@@ -1,0 +1,54 @@
+To work with MongoDB using JS, library used
+    - Mongoose library used 
+
+* Best practice to use framework in any language to avoid re-inventing the wheel
+
+
+== 1 Initializing Node Server ==
+
+    1) create project directory
+    2) create server.js inside project dir
+    3) npm init  inside project dir
+        - creates package.json
+    4) npm install express mongoose morgan body-parser nodemon
+        - express : Backend framework
+        - mongoose: JS-MongoDB library
+        - morgan: HTTP middleware to log info.
+        - body-parser: HTTP parser middleware
+
+    5) inside server.js:
+
+        const express = require("express");
+        const mongoose = require("mongoose");
+        const morgan = require("morgan");
+        const bodyParser = require("body-parser");
+
+        //testdb is name of database
+        mongoose.connect("mongodb://localhost:27017/testdb",
+        {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        }
+        );
+
+        const db = mongoose.connection;
+
+        db.on("error", (err)=>{
+            console.log(err);
+        });
+
+        db.once("open", ()=>{
+            console.log("Database Connection Established!);
+        })
+
+        const app = express();
+        app.use(morgan("dev"));
+        app.use(bodyParser.urlencoded({extended:true}));
+        app.use(bodyParser.json());
+
+        const PORT = process.env.PORT || 3000;
+
+        app.listen(PORT, ()=>{
+            console.log(`Server is running on port ${PORT}`);
+        });
+
