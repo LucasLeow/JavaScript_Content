@@ -3,8 +3,7 @@ To work with MongoDB using JS, library used
 
 * Best practice to use framework in any language to avoid re-inventing the wheel
 
-
-== 1 Initializing Node Server ==
+== 2 Initializing Node Server ==
 
     1) create project directory
     2) create server.js inside project dir
@@ -52,3 +51,56 @@ To work with MongoDB using JS, library used
             console.log(`Server is running on port ${PORT}`);
         });
 
+    6) Go to package.json
+        - Go to scripts
+        - "start" : "nodemon server.js"
+
+
+== 3 CRUD operations ==
+
+
+    1) Create 3 new directories
+        - controllers
+        - models
+        - routes
+
+    2) Create Employee files
+        - EmployeeController.js (controllers)
+        - Employee.js (models)
+        - employee.js (routes)
+
+    3) Go to models
+
+        Mongoose Schema Types:
+            - String
+            - Number
+            - Date
+            - Buffer
+            - Boolean
+            - Mixed
+            - ObjectId
+            - Array
+            - Decimal128
+            - Map
+
+        - Inside Employee.js
+
+        const mongoose = require("mongoose");
+        const Schema = mongoose.Schema;
+        const employeeSchema = new Schema({
+            name: {
+                type: String
+            },
+            designation: {
+                type: String
+            },
+            email: {
+                type: String
+            },
+            phone: {
+                type: String
+            },
+            age: {
+                type: Number
+            }
+        }, { timestamps: true });
