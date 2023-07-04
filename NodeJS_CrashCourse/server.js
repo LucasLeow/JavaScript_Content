@@ -13,13 +13,22 @@ const server = http.createServer((req, res) => {
             path += 'about.html';
             break;
         }
+        case '/about-me': {
+            console.log(path);
+           
+            res.writeHead(301, {
+                Location: '/about'
+            });
+            
+            break;
+        }
         default: {
             path += 'error.html';
         }
     }
 
     // set response header
-    res.setHeader('Content-Type', 'text/html');
+    // res.setHeader('Content-Type', 'text/html');
 
     // send html file
     fs.readFile(path, (err, data) => {

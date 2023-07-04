@@ -1,5 +1,14 @@
+Learnings in this text:
+    - NodeJS global object
+    - NodeJS "fs" module
+    - NodeJS Server using "http" module
+        - Request | Response object
+        - serving HTML using "fs" module (routes)
+        - 
+
+
 == 1 Intro & Setup ==
-    
+   
     - What is NodeJS
 
         - JS Runtime environment to run JS on computers
@@ -477,10 +486,16 @@
 
 
                     // redirection here using setHeader
-                        case '/about-me': {
-                            res.statusCode = 301;
-                            res.setHeader('Location', '/about');
-                        }
+
+                                    case '/about-me': {
+                                        console.log(path);
+                                    
+                                        res.writeHead(301, {
+                                            Location: '/about'
+                                        });
+                                        
+                                        break;
+                                    }
 
 
 
@@ -492,8 +507,45 @@
                     }
 
 
-    
 
+== 5 Node Package Manager (npm) ==
+    - packages not in node core
+    - written by other users / companies
+    - frameworks
+
+    - automatically installed together with Node
+
+    https://npmjs.com
+        - search for different packages available
+
+        -- Popular node packages --
+            1) nodemon
+                - helps to refresh server everytime changes saved
+
+                    - npm install nodemon
+                    - use "nodemon" cmd instead of "node"
+
+    
+    -- Creating package.json file --
+
+        1) Create project directory
+        2) npm init -y 
+            package-lock.json
+                - keeps track of depedencies of packages
+
+            - dependencies 
+                - tracks packages used in project
+
+            - node_modules
+                - all packages will be installed inside node_modules
+
+    -- Sharing files --
+        - node_modules may be very large
+        - upload all project code except node_modules
+        - download entire code into project directory
+        - open project directory
+            - npm install
+                - automatically installs all dependencies
 
 
         
