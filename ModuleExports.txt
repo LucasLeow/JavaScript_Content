@@ -1,0 +1,52 @@
+
+- require() executes js file but does not carry over any data
+- module.exports
+	- contains data that should be exported
+	
+	eg:
+	
+	inside add.js
+	
+		function add(a, b) = {
+			console.log(a + b);
+		}
+		
+		module.exports = add;
+		
+	inside main.js:
+	
+		const addfn = require('./add');
+		addfn();
+	
+	
+	
+	
+	module.exports = {
+		add,
+		subtract
+	}
+	
+	or
+	
+	module.exports.add = add;
+	module.exports.subtract = subtract;
+	
+	or
+	
+	exports.add = add;
+	exports.subtract = subtract;
+	
+	** Danger, cannot simply use exports = add; (for purpose of exporting single function)
+		- changes definition of exports
+		(under the hood) 
+			var exports = module.exports;
+			
+	
+	
+	const opObj = require('./add');
+	
+	opObj.add()
+	opObj.subtract()
+	
+	shorthand if key & value same 
+	i.e add: add, subtract: subtract

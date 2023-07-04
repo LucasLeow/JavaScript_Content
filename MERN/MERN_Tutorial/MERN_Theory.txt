@@ -1,0 +1,31 @@
+== 1 Intro to MERN stack ==
+
+    - 4 technologies used to make interactive web app
+    - Full stack
+
+    MongoDB (NoSQL Database)
+        - Stores data
+
+    ExpressJS (BackEnd)
+        - handle requests (Authentication etc.)
+        - Express app running in NodeJS environment
+        - framework for Node to create easy API
+
+    ReactJS (FrontEnd)
+        - Render Components in Browser
+        - Handles routing in browser (show different webpages)
+        
+    NodeJS (Runtime + BackEnd)
+
+
+    1) React makes request to Express
+    2) Express process request then interacts with MongoDB
+        - authenticate users
+        - perform CRUD on DB
+    3) Send response back to React
+        - typically JSON
+    4) React output data on template
+
+    Purpose of Express | Node instead of React direct to Mongo
+        - to prevent exposing sensitive data to front-end code
+        - hides sensitive code from front-end

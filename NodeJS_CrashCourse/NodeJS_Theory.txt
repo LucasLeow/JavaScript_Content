@@ -1,0 +1,109 @@
+== 1 Intro & Setup ==
+    
+    - What is NodeJS
+
+        - JS Runtime environment to run JS on computers
+            - written in C++, wraps around V8 Engine
+                - V8 Engine written in C++ by Google team, embedded in Chrome
+
+        - Read & Write files on computers
+        - Connect to database
+        - Act as server for content
+
+        - Lose access to DOM
+            - cannot interact with HTML element using NodeJS
+            - cannot use document.querySelector in Node
+                - document part of "window" object
+
+
+    Benefits of Node as BackEnd
+        - No need to learn extra language for Backend (if alrdy familiar)
+        - share code b/w front-end & back-end
+        - massive community, library & frameworks
+
+
+== 2 Node.js Basics ==
+
+
+    -- 2.1 global object in NodeJS --
+        (https://nodejs.org/api/globals.html#global-objects)
+        
+        - Inside browser, known as "window" object
+            - load of methods & properties accessible
+
+        - Inside Node, known as "global" object
+            - don't have to use "global" prefix (implied)
+
+            i.e setTimeout() instead of global.setTimeout()
+
+
+
+    -- 2.2 modules & require --
+
+        - modules are simply JS files
+        - need separate modules to keep code neat (modularity)
+        - require() will simply execute js file, no data imported / exported
+        
+        inside people.js:
+            const people = ['person1', 'person2'];
+            const ages = [20, 23];
+
+            module.exports = {
+                people,
+                ages
+            };
+
+        inside main.js:
+
+            const data = require('./people');
+            console.log(data.people, data.ages);
+
+
+        Destructuring objects:
+            - must be same name as property exported
+        
+        eg:
+
+        inside main.js:
+
+            const { people, ages } = require('./people');
+
+            console.log(people);
+
+
+        Core modules in JS:
+            - also known as built-in modules (ships with Node) 
+            (https://www.w3schools.com/nodejs/ref_modules.asp)
+
+                assert
+                buffer
+                child_process
+                cluster
+                crypto
+                dgram
+                dns
+                domain
+                events
+                fs
+                http
+                https
+                net
+                os
+                path
+                punycode
+                querystring
+                readline
+                stream
+                string_decoder
+                timers
+                tls
+                tty
+                url
+                util
+                v8
+                vm
+                zlib
+
+
+            
+
