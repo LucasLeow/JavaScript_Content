@@ -191,6 +191,60 @@
                 }
 
 
+    -- 2.4 Streams & Buffers --
+        - To handle larger files
+        - Also using fs module in JS
+
+        Streams:
+            - Start using data before finished loading
+                - small chunks of data (buffer) passed down the stream
+            - Like video streaming instead of downloading entire video before watching
+            - for fs module, must load entire file before using
+
+        
+        Also using fs module
+
+            1) READ STREAMS & WRITE STREAMS
+
+                - readStream.on('data') : EventListener for data event on stream
+
+            eg:
+            
+            const fs = require('fs');
+
+            const path = './docs/largeFile.txt';
+            const writePath = './docs/newFile.txt';
+
+            const readStream = fs.createReadStream(path, { encoding: 'utf8' }); // encoding will convert buffer to string
+            const writeStream = fs.createWriteStream(writePath);
+
+            readStream.on('data', (buf)=>{
+                console.log("-- New Buffer --");
+                console.log(buf);
+
+                writeStream.write('\n New Buffer \n');
+                writeStream.write(buf);
+            });
+
+
+        - Pipe Stream -
+            - Transfer Readable Stream data to Writable Stream
+
+                eg:
+
+                const fs = require('fs');
+
+                const path = './docs/largeFile.txt';
+                const writePath = './docs/newFile.txt';
+
+                const readStream = fs.createReadStream(path, { encoding: 'utf8' }); // encoding will convert buffer to string
+                const writeStream = fs.createWriteStream(writePath);
+
+                readStream.pipe(writeStream);
+
+
+
+                
 
 
 

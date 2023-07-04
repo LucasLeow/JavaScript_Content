@@ -1,10 +1,15 @@
 const fs = require('fs');
 
-if (fs.existsSync('./docs/blog1.txt')) {
-    fs.unlink('./docs/blog1.txt', (err) => {
-        if (err) {
-            console.log(err);
-        }
-        console.log("File deleted");
-    })
-}
+const path = './docs/largeFile.txt';
+const writePath = './docs/newFile.txt';
+
+const readStream = fs.createReadStream(path, { encoding: 'utf8' }); // encoding will convert buffer to string
+const writeStream = fs.createWriteStream(writePath);
+
+readStream.on('data', (buf)=>{
+    console.log("-- New Buffer --");
+    console.log(buf);
+
+    writeStream.write('\n New Buffer \n');
+    writeStream.write(buf);
+});
