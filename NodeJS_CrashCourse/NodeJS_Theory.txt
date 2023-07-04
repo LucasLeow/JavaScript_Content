@@ -104,6 +104,95 @@
                 vm
                 zlib
 
+    -- 2.3 File System --
+
+        - 1 of the core modules that ship with Node for file manipulation
+        - good for small files, for larger files, use Stream (see Section 2.4)
+        - Read | Create | Delete files / directories
+
+        CHECK IF FILE / DIR EXIST:
+            - fs.existsSync(path)
+                - returns boolean
+
+        READING FILES:
+
+            - fs.readFile(path, callback(err, data))
+                - readFile is an async function
+                - fires callback upon completion
+                - data in buffer format, to show txt, use .toString method
+
+        eg:
+
+            const fs = require('fs');
+
+            fs.readFile('./docs/blog1.txt', (err, data)=> {
+                if (err) {
+                console.log(err); 
+                }
+                console.log(data.toString());
+            });
+        
+        WRITING FILES:
+            - Overwrites file with new content provided
+            - if file not exist, will create new txt file
+
+            - fs.writeFile(path, dataToWrite, callback());
+
+        eg:
+
+            const fs = require('fs');
+
+            fs.writeFile('./docs/blog1.txt', "Hello World", ()=> {
+                console.log('Data successfully written');
+            });
+
+        DIRECTORIES:
+
+            - fs.mkdir(path, callback)
+            - if dir already exist, throws error
+                - best practice to check if folder exist
+
+            - fs.rmdir(path, callback)
+                - to remove directory
+
+            eg:
+
+                const fs = require('fs');
+
+                if (fs.existsSync('./assets')) {
+                    fs.rmdir('./assets', (err) => {
+                        if (err) {
+                            console.log(err);
+                        }
+                    console.log("dir deleted");
+                    });
+                } else {
+                    fs.mkdir('./assets', (err)=>{
+                    if (err) {
+                        console.log(err);
+                    }
+                    console.log("directory created");
+                })
+                }
+        
+        DELETING FILES:
+
+            - fs.unlink(path, callback(err))
+
+            eg:
+
+                if (fs.existsSync('./docs/blog1.txt')) {
+                    fs.unlink('./docs/blog1.txt', (err) => {
+                        if (err) {
+                            console.log(err);
+                        }
+                        console.log("File deleted");
+                    })
+                }
+
+
+
+
 
             
 
