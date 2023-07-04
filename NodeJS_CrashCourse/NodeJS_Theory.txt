@@ -22,6 +22,7 @@
         - massive community, library & frameworks
 
 
+
 == 2 Node.js Basics ==
 
 
@@ -243,7 +244,10 @@
                 readStream.pipe(writeStream);
 
 
+
+
 == 3 Node Clients & Servers ==
+
     - communication b/w website & server
     - when running server side code, console log will be on server console, not browser
 
@@ -259,19 +263,19 @@
 
         1) create server.js file
 
-            const http = require('http');
+                const http = require('http');
 
-            // callback fn executes whenever requests received by server
-            const server = http.createServer((req, res) => {
-                console.log('request made');
-            });
+                // callback fn executes whenever requests received by server
+                const server = http.createServer((req, res) => {
+                    console.log('request made');
+                });
 
-            const PORT = 3000;
+                const PORT = 3000;
 
-            // default is localhost
-            server.listen(PORT, 'localhost', () => {
-                console.log(`Listening for requests on port ${PORT}`);
-            });
+                // default is localhost
+                server.listen(PORT, 'localhost', () => {
+                    console.log(`Listening for requests on port ${PORT}`);
+                });
 
 
         localhost: Loopback IP Address
@@ -283,7 +287,213 @@
             - 65,535 possible ports
 
 
+
+== 4 Requests & Response Object ==
+
+
+    REQUEST OBJECT: 
+
+        - request object contains load of information
+        - console log will show entire request object
+
+                const server = http.createServer((req, res) => {
+                    console.log(req);
+                });
+
+        - some useful request properties:
+            - req.url (gives the url, useful for sending relevent response)
+            - req.method (HTTP method of request)
+
+
+                const server = http.createServer((req, res) => {
+                    console.log(req.url, req.method);
+                });
+
+    
+    RESPONSE OBJECT:
         
+        - sent by server to browser
+
+        Response headers
+            - provide metadata to Client
+            - some default automatically set
+
+            eg:
+                - what data to expect
+                    - JSON
+                    - text
+                    - pdf
+                    - html etc.
+
+                - set cookies
+
+
+                const server = http.createServer((req, res) => {
+                    console.log(req.url, req.method);
+
+                    res.setHeader('Content-Type', 'text/plain');
+                    res.write('hello, world');
+                    res.end();
+                });
+
+                To return HTML:
+                
+
+                const server = http.createServer((req, res) => {
+                    console.log(req.url, req.method);
+
+                    res.setHeader('Content-Type', 'text/html');
+                    res.write("<h1> Hello world </h1>");
+                    res.write("<p> Hello world </p>");
+                    res.end();
+                });
+
+    -- RETURNING HTML PAGES --
+
+        1) Create "views" dir to store html PAGES
+        2) create index.html & initialize default template
+            - add <h1> Home Page </h1> in body
+
+        3) go to server.js
+
+                const http = require('http');
+                const fs = require("fs");
+
+                const server = http.createServer((req, res) => {
+                    console.log(req.url, req.method);
+
+                    // set response header
+                    res.setHeader('Content-Type', 'text/html');
+
+                    // send html file
+                    fs.readFile('./views/index.html', (err, data) => {
+                        if (err) {
+                            console.log(err);
+                            res.end();
+                        } else {
+                            res.write(data);
+                            res.end();
+                        }
+                    });
+                });
+
+                const PORT = 3000;
+                server.listen(PORT, 'localhost', () => {
+                    console.log(`Listening for requests on port ${PORT}`);
+                });
+
+
+    -- Basic Routing --
+
+        - send desired resource according to URL provided
+
+            1) Create about.html in "views" dir
+                - add h1 : about
+            2) Create error.html in "views" dir
+                - add h1 : Error, page not found
+            3) Go to server.js
+                3.1) Checking url provided
+
+
+                const http = require('http');
+                const fs = require("fs");
+
+                const server = http.createServer((req, res) => {
+                    console.log(req.url, req.method);
+
+                    let path = './views/';
+                    switch(req.url) {
+                        case '/' : 
+                            path += 'index.html';
+                            break;
+                        case '/about': {
+                            path += 'about.html';
+                            break;
+                        }
+                        default: {
+                            path += 'error.html';
+                        }
+                    }
+
+                    // set response header
+                    res.setHeader('Content-Type', 'text/html');
+
+                    // send html file
+                    fs.readFile(path, (err, data) => {
+                        if (err) {
+                            console.log(err);
+                            res.end();
+                        } else {
+                            res.write(data);
+                            res.end();
+                        }
+                    });
+                });
+
+                const PORT = 3000;
+                server.listen(PORT, 'localhost', () => {
+                    console.log(`Listening for requests on port ${PORT}`);
+                });
+
+    -- Status Codes --
+        - 1xx - information
+        - 2xx - successfully
+        - 3xx - redirect
+        - 4xx - client errors
+        - 5xx - server errors
+        
+
+                    switch(req.url) {
+                        case '/' : 
+                            path += 'index.html';
+                            res.statusCode = 200;
+                            break;
+                        case '/about': {
+                            path += 'about.html';
+                            res.statusCode = 200;
+                            break;
+                        }
+                        default: {
+                            path += 'error.html';
+                            res.statusCode = 404;
+                        }
+                    }
+            - In dev tools, network, can see status codes
+
+
+    -- Redirecting of Resources --
+
+                    switch(req.url) {
+                        case '/' : 
+                            path += 'index.html';
+                            res.statusCode = 200;
+                            break;
+                        case '/about': {
+                            path += 'about.html';
+                            res.statusCode = 200;
+                            break;
+                        }
+                    
+
+
+                    // redirection here using setHeader
+                        case '/about-me': {
+                            res.statusCode = 301;
+                            res.setHeader('Location', '/about');
+                        }
+
+
+
+
+                        default: {
+                            path += 'error.html';
+                            res.statusCode = 404;
+                        }
+                    }
+
+
+    
+
 
 
         
