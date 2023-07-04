@@ -243,7 +243,50 @@
                 readStream.pipe(writeStream);
 
 
+== 3 Node Clients & Servers ==
+    - communication b/w website & server
+    - when running server side code, console log will be on server console, not browser
 
+    IP Address
+        - address assigned to each device connected to internet
+    
+    Domain
+        - English name mapped to IP Addresses to make it easier to remember
+
+    -- Creating Server in Node --
+        - using http module in Node
+        (https://www.w3schools.com/nodejs/nodejs_http.asp)
+
+        1) create server.js file
+
+            const http = require('http');
+
+            // callback fn executes whenever requests received by server
+            const server = http.createServer((req, res) => {
+                console.log('request made');
+            });
+
+            const PORT = 3000;
+
+            // default is localhost
+            server.listen(PORT, 'localhost', () => {
+                console.log(`Listening for requests on port ${PORT}`);
+            });
+
+
+        localhost: Loopback IP Address
+            - 127.0.0.1 (Points back to own computer)
+        
+        Port Number:
+            - A specific channel / Gateway on computer 
+            - "doors" into computer for internet connection to different programs
+            - 65,535 possible ports
+
+
+        
+
+
+        
                 
 
 
