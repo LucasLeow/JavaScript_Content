@@ -28,7 +28,7 @@ const server = http.createServer((req, res) => {
     }
 
     // set response header
-    // res.setHeader('Content-Type', 'text/html');
+    res.setHeader('Content-Type', 'text/html');
 
     // send html file
     fs.readFile(path, (err, data) => {

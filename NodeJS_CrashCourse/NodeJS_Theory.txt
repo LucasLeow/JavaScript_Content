@@ -547,6 +547,54 @@ Learnings in this text:
             - npm install
                 - automatically installs all dependencies
 
+== 6 Express Framework ==
+    - previously use "http" library to handle requests
+    - Express framework helps manage routing / requests / server side routing / logic
+    - Don't have to use Express, can simply use node
+
+        1) create project directory
+        2) npm i express
+        3) create app.js in project dir
+
+                const express = require('express');
+
+                // Create instance of express object
+                const app = express();
+
+                app.listen(3000); // returns instance of server (can save in var for websockets)
+
+                // 1st argument: url path to listen for, 2nd argument: callback when request received
+                app.get('/', (req, res) => {
+                    res.send('<p>Home App </p>'); // automatically infers content type & set in headers
+                    // dont have to res.setHeader("Content-Type", 'text/html');
+                });
+
+
+            4) Creating Routing to deliver resources (HTML pages)
+                    app.get('/', (req, res) => {
+                        res.send("<p> Send automatically detects content-type </p>")// automatically infers content type & set in headers
+                        res.sendFile('./views/index.html', {root: 'h:/SelfLearning/BackEnd/JavaScript/NodeJS_CrashCourse'}); 
+                            - sendFile takes in absolute path
+                            - therefore, if provide relative path, need to specify absolute path leading to resource folder
+                    });
+
+                    app.get('/about', (req, res) => {
+                        res.sendFile('./views/about.html', {root: 'h:/SelfLearning/BackEnd/JavaScript/NodeJS_CrashCourse'});
+                    });
+
+                    app.get('/about-us', (req, res) => {
+                        res.redirect('/about');
+                    })
+
+                    app.use((req, res) => {
+                        res.status(404).sendFile('./views/error.html', {root: 'h:/SelfLearning/BackEnd/JavaScript/NodeJS_CrashCourse'});
+                            - have to chain status since use() does not detect that the following is an error, its simply a middleware callback fn
+                    })
+
+                    // .use(callback) is a middleware that will fire whenever request received
+                        - not scoped to any particular path
+                        - will fire for any request regardless of URL if code manage to reach that point
+                        - sequence matters, will fire if about any routes
 
         
                 
