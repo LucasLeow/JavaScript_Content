@@ -596,10 +596,138 @@ Learnings in this text:
                         - will fire for any request regardless of URL if code manage to reach that point
                         - sequence matters, will fire if about any routes
 
-        
+
+== 7 View Engines (Serving Dynamic HTML Content) ==
+    - using view / template engine
+    - Express apps can use this easily
+    - Several Templating Engine exists
+        - Express Handlebars
+        - Pug (different from HTML)
+        - EJS (Simple)
+
+            1) npm install ejs
+            2) in app.js
+                - app.set('view engine', 'ejs); // set() allows configuring app settings
+                - By default, ejs search in "views" directory for HTML content
+                - else, app.set('views', 'newViews'); // to set custom "views" dir
+            3) go to "views" dir
+                - create "index.ejs" file
+                - init HTML template as per normal
+            4) go to app.js
+                - instead of sendFile, must render() view
+                    app.get('/', (req, res)=> {
+                        res.render('index'); // express look inside "view" dir, search for index.ejs
+                    })
+            5) create about.ejs & error.ejs
+            6) Add routing to about.ejs & error.ejs in app.js
+            7) create 'create.ejs' for '/blog/create' route
+                - add form within create.ejs (refer to create.ejs for more info on HTML)
                 
+            8) ejs tags can be used to render dynamic data
+                - <% const name = 'mario' %> // inside body tag
+                    - runs as JS in server, not browser
+                - <p> <%= name %> </p> 
+                    - If want to output dynamic data, need to include '=' sign in ejs tag
+                
+            8.1)
+                * Typically, data passed to view from app.js
+                * usually, data retrieved from database, then app.js pass to views
+
+                inside app.js:
+                    app.render('index', { title: "Home"})
+
+                - Then can use <%= title %> in index.ejs
+            9) add dynamic titles for about, create, error
+
+            10) add dynamic content for index.html
+
+                in app.js
+                app.get('/', (req, res) => {
+                        const blogs = [
+                            {title: "Yoshi find eggs", snippet: "Reprehenderit aliquip mollit laboris culpa ex nisi."},
+                            {title: "Mario find peach", snippet: "Non occaecat nulla occaecat dolore proident velit esse consectetur laborum nisi reprehenderit dolor anim ut."},
+                            {title: "How to defeat Bowser", snippet:"Dolor ex est enim eiusmod eiusmod laborum non ipsum laborum esse sint in."}
+                        ];
+                        res.render('index', {title:"Dynamic Home", blogs});
+                    });
+
+                in index.ejs:
+
+                            <div class="blogs content">
+                                <h2>All Blogs</h2>
+                                <% if (blogs.length > 0) { %>
+                                        <% blogs.forEach((item) => { %>
+                                            <h3 class="title"><%= item.title %></h3>
+                                            <p class="snippet"><%= item.snippet %></p>
+                                        <% }) %>
+                                <% } else { %>
+                                    <p>There are no blogs to display..</p>
+                                <% } %>
+                            </div>
+
+            -- How does EJS Templates work? --
+                1) EJS files live on server
+                2) View file passed to EJS engine in server to process
+                    - engine looks for <%= %> ejs tags
+                    - When find tags, process & converts to valid HTML syntax
+                    - Known as server-side rendering
+
+            -- EJS tags --
+                <%= : equal signs escape special characters, resulting in string value, used for specifying values
+                <%- : Does not escape characters, used for importing
 
 
+            -- Partials --
+                - Common content in all pages
+                - Put in single ejs file & import to all other files needing the common content
+                - known as Partial templates
+
+                1) create dir "partials" inside "views" dir
+                    - create nav.ejs | head.ejs | footer.ejs
+
+                    inside nav.ejs:
+
+                        <nav>
+                            <div class="site-title">
+                                <a href="/"><h1><%= name %> Blog</h1></a>
+                                <p><%= name %> Blog Site</p>
+                            </div>
+                            <ul>
+                                <li><a href="/">Blogs</a></li>
+                                <li><a href="/about">About</a></li>
+                                <li><a href="/blogs/create">New  Blog</a></li>
+                            </ul>
+                        </nav>
+
+                    2) go to index.ejs
+                        - in <body>, specify:
+                        (at the location where you would like to put the nav tags)
+                            <%- include('./partials/nav.ejs') %>
+
+                    3) repeat for
+                        - about
+                        - create
+                        - error
+
+                    
+                    4) go to index.ejs
+                        - copy contents in <head> tag & paste into head.ejs
+
+                        then:
+                         <%- include('./partials/head.ejs') %> in relevant ejs files
+
+                    5) write footer.ejs
+
+                            <footer>
+                                Copyright &copy; Lucas  Blog 2023
+                            </footer>
+
+                    6) <%- include('./partials/footer.ejs') %> in relevant ejs files
+
+== Adding CSS to project ==
+    - 
+
+ 
 
             
 
