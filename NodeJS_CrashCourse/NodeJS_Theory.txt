@@ -4,7 +4,11 @@ Learnings in this text:
     - NodeJS Server using "http" module
         - Request | Response object
         - serving HTML using "fs" module (routes)
-        - 
+    - Simple Express App
+    - ViewEngine (EJS)
+        - using "views" & "partials"
+        - creating .ejs files to serve dynamic HTML (using ejs tags <% %>)
+    
 
 
 == 1 Intro & Setup ==
@@ -591,7 +595,7 @@ Learnings in this text:
                             - have to chain status since use() does not detect that the following is an error, its simply a middleware callback fn
                     })
 
-                    // .use(callback) is a middleware that will fire whenever request received
+                    // .use((req, res)=>) is a middleware that will fire whenever request received
                         - not scoped to any particular path
                         - will fire for any request regardless of URL if code manage to reach that point
                         - sequence matters, will fire if about any routes
@@ -724,10 +728,96 @@ Learnings in this text:
 
                     6) <%- include('./partials/footer.ejs') %> in relevant ejs files
 
-== Adding CSS to project ==
-    - 
+== 8 Middleware ==
+    - Any code which runs on the server
+    -  in-between getting a request & sending a response
+        - after receiving request
+        - before sending back response
+    - Can have > 1 middleware function
+    - code is executed before response is sent back to client
+    - runs from top to bottom
+        - sequential execution of middleware code
 
- 
+        eg:
+            Line 1: app.use(func)
+            Line 2: app.get('/', func)
+            Line 3: app.use(func)
+
+            - if send a '/' request,
+                - Line 1 executes
+                - Line 2 executes & sends a response back to client
+                - Line 3 will not execute since response already sent back
+
+        Middleware use cases:
+
+            - Logger middleware to log details of requests
+            - Authentication middleware for protected routes
+            - Parser middleware to parse json
+            - Return 404 pages middleware
+                - app.use(func) at the bottom to catch any uncaught routes
+            etc.
+
+        Middleware application in project:
+            * Have to use "next" callback to tell browser what to do next after executing middleware()
+            - else, after executing app.use((req, res)=>{}), browser will hang as it doesn't know what to do next
+                app.use((req, res, next)=>{})
+
+            1) go to app.js above app.get('/')
+
+                app.use((req, res, next) => {
+                    console.log("new request made: ");
+                    console.log('host: ', req.hostname);
+                    console.log('path', req.path);
+                    console.log('method', req.method);
+                    next(); // middleware finished, move to next step
+                });
+
+    3rd party middlewares:
+        - created by other people
+        - "morgan" : logger middleware (used in this project)
+        - "helmet" : security middleware
+        - cookies | sessions | validation etc. just search online
+
+
+        Using "morgan" logger middleware in project:
+            1) go to project dir & npm install morgan
+            2) go to app.js
+                
+                1) const morgan = require("morgan");
+                2) remove app.use() middleware for logging added earlier
+                3) app.use(morgan('dev')); 'dev' is the argument for type of formatting for logging
+                    - add below app.listen(3000);
+                    - refer to morgan documentation for types of formatting keyword
+        
+    Using Middleware to serve static files (css files)
+        - imgs are also static files
+        - server protects access to files stored in server
+        - need to specify to server what files can be accessed (public)
+            
+            * Utilize "static" middleware that comes with Express
+                - to give access to static file (styles.css)
+                
+                    1) Go to app.js
+                    2) app.use(express.static('public'));
+                        - 'public' is a directory that contains static resources
+                        - any static files within 'public' will be made available
+                    3) create "styles.css" inside "public"
+                    4) create simple css 
+                        body {
+                            background: crimson;
+                        }
+                    5) go to head.ejs
+                        - <link rel="stylesheet" href="styles.css">
+                            - express will automatically look into "public" directory
+                            - since "public" was given as argument (see step 2)
+
+                    6) Go to head.ejs
+                        - copy all content within <style> into styles.css
+                        - remove <style> tags
+                        - include <link rel="stylesheet" href="styles.css"> in place of <style> tags
+
+
+
 
             
 

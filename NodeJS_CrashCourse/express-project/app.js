@@ -1,9 +1,13 @@
 const express = require('express');
+const morgan = require("morgan");
 
 const app = express();
 app.set('view engine', 'ejs');
 
 app.listen(3000); // returns instance of server (can save in var for websockets)
+
+app.use(morgan('dev'));
+app.use(express.static('public'));
 
 app.get('/', (req, res) => {
     const blogs = [
