@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const Blog = require("./models/blog");
 
 const app = express();
-const dbURI = "mongodb+srv://testlucas:evilred@lucascluster.hr7yd6q.mongodb.net/node-crash-course?retryWrites=true&w=majority";
+const dbURI = "mongodb+srv://testlucas:@lucascluster.hr7yd6q.mongodb.net/node-crash-course?retryWrites=true&w=majority";
 
 mongoose.connect(dbURI, {useNewUrlParser:true, useUnifiedTopology: true})
 .then((result) => {
