@@ -1,21 +1,32 @@
 const express = require('express');
 const morgan = require("morgan");
+const mongoose = require("mongoose");
+const Blog = require("./models/blog");
 
 const app = express();
-app.set('view engine', 'ejs');
+const dbURI = "mongodb+srv://testlucas:evilred@lucascluster.hr7yd6q.mongodb.net/node-crash-course?retryWrites=true&w=majority";
 
-app.listen(3000); // returns instance of server (can save in var for websockets)
+mongoose.connect(dbURI, {useNewUrlParser:true, useUnifiedTopology: true})
+.then((result) => {
+    console.log("Connected to db");
+    app.listen(3000); // returns instance of server (can save in var for websockets)
+})
+.catch((err) => {console.log(err)});
+
+app.set('view engine', 'ejs');
 
 app.use(morgan('dev'));
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-    const blogs = [
-        {title: "Yoshi find eggs", snippet: "Reprehenderit aliquip mollit laboris culpa ex nisi."},
-        {title: "Mario find peach", snippet: "Non occaecat nulla occaecat dolore proident velit esse consectetur laborum nisi reprehenderit dolor anim ut."},
-        {title: "How to defeat Bowser", snippet:"Dolor ex est enim eiusmod eiusmod laborum non ipsum laborum esse sint in."}
-    ];
-    res.render('index', {title:"Dynamic Home", blogs});
+    Blog.find()
+    .then((result) => {
+        console.log(result);
+        res.render('index', {title: "Home", blogs: result});
+    })
+    .catch((err) => {
+        console.log(err);
+    });
 });
 
 app.get('/about', (req, res) => {

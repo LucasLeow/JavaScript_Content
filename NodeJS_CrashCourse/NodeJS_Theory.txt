@@ -818,6 +818,209 @@ Learnings in this text:
 
 
 
+== 9 NodeJS MongoDB ==
+    - SQL vs NoSQL
+    
+    SQL
+        - Tables | Rows | Columns
+    NoSQL
+        - Collections | Documents
+        - Each collection used to store a particular type of document
+        
+            User Collection : Stores user documents
+            Blog Collection : Stores Blog documents
+
+                Document: (very similar to JSON)
+                {
+                    "id": 12345,
+                    "title": "Blog 1",
+                    "snippet": "Learning Programming",
+                    "body": "Learning programming is my hobby.."
+                }
+
+            Collection can store many documents
+            - perform CRUD on documents
+
+    MongoDB
+        - download & use locally
+        - use via cloud services (MongoDB Atlas) (easier to manage)
+                1) Create new cluster
+                    - 3 types: Serverless | Dedicated (Most costly) | Shared (Free)
+                2) Once done, go to cluster & open Collections
+                3) Create Database within Cluster
+                    - Database name (project name)
+                        - node-crash-course
+                    - Collection name (related to content it is storing)
+                        - blogs
+                        - payments
+                        - employees (etc.)
+                4) Create access to db for connection b/w app & db
+                    - on mongoDB, go to Database Access (under security)
+                    - Add New Database User
+                        - user & password
+                        - Built-In-Role: Access Modifier (Read & Write to any database)
+                5) Go back to Database & click "connect" to cluster
+                    - select connection method (connect to application) (drivers)
+                    - copy connection string
+                    - go to app.js
+                        const dbURI = <connectionString>
+                6) Can connect using regular mongoDB api
+                    - Mongoose (Object Document Mapping Library)
+                        - wraps the standard mongoDB API
+                        - creates data model that has methods to perform CRUD / manipulate data etc.
+
+                        eg:
+                            To work with User Collection, create corresponding User Model
+                                - User.get() | User.findbyId() etc.
+                                - Blog.deleteOne() etc.
+
+                        How Mongoose work:
+
+                            Step 1: Create Schema
+                            Schemas:
+                                - defines structure of data / document
+                                eg:
+                                User Schema:
+                                    - name (string), required
+                                    - age (number)
+                                    - bio (string), required
+
+                                Blog Schema:
+                                    - title (string), required
+                                    - snippet (string), required
+                                    - body (string), required
+                            
+                            Step 2: Create Model based on provided Schema
+                                - Model connects to the actual db in mongoDB
+
+                            - Blog Model Built from Blog Schema
+                            - Blog Model have static & instance methods to interact with database
+                                - CRUD operations
+
+                7) npm i mongoose
+                8) go to app.js
+                        const mongoose = require("mongoose");
+
+                        //"mongodb+srv://<username>:<password>@lucascluster.hr7yd6q.mongodb.net/<dbname>?retryWrites=true&w=majority";
+
+                        const dbURI = "mongodb+srv://testlucas:evilred@lucascluster.hr7yd6q.mongodb.net/node-crash-course?retryWrites=true&w=majority";
+                       
+
+                    // run app.listen(PORT) only after connection to DB successful
+                        mongoose.connect(dbURI, {useNewUrlParser:true, useUnifiedTopology: true})
+                        .then((result) => {
+                            console.log("Connected to db");
+                            app.listen(3000); // returns instance of server (can save in var for websockets)
+                        })
+                        .catch((err) => {console.log(err)});
+
+                        // mongoose.connect() returns a promise, can use .then() & .catch() chain
+
+                9) create "models" dir
+                10) create blog.js inside "models" dir
+
+                    const mongoose = require("mongoose");
+                    const Schema = mongoose.Schema;
+
+                    const blogSchema = new Schema({
+                        title: {
+                            type: String,
+                            required: true
+                        },
+                        snippet: {
+                            type: String,
+                            required: true
+                        },
+                        body: {
+                            type: String,
+                            required: true
+                        }
+                    }, { timestamps: true }); // generates timestamps whenever CRUD takes place
+
+                const Blog = mongoose.model('Blog', blogSchema);
+                        - convention is capital letter
+                        - 1st argument : Name of Collection
+                            - automatically pluralize it ( eg. Blog -> blogs )
+                        - 2nd argument : Schema
+                
+                module.exports = Blog;
 
             
+            11) create sandbox route to test connection
+                - go to app.js
 
+                    const Blog = require('./models/blog');
+
+                    app.get("/add-blog", (req, res) => {
+                        const blog = new Blog({
+                            title: "new blog",
+                            snippet: "about new blog",
+                            body: "body of new blog"
+                        });
+                        blog.save()
+                        .then((result) => {
+                            res.send(result);
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        })
+                    })
+
+                    - test connection by using:
+                        localhost:3000/add-blog
+
+                    // Create route to retrieve all blogs
+                    app.get("/all-blogs", (req, res) => {
+                        Blog.find()
+                        .then((result) => {
+                            res.send(result); // send result to browser
+                        })
+                        .catch((err)=>{
+                            console.log(err);
+                        }); 
+                    });
+
+                    // Create route to retrieve single blog
+                            app.get("/single-blog", (req, res) => {
+                                Blog.findById("64a78616f9268c1d5eaf15a5")
+                                .then((result) => {
+                                    res.send(result);
+                                })
+                                .catch((err)=>{console.log(err)});
+                            });
+
+                                - Every document in mongoDB have unique id when created
+                                - type is ObjectId but mongoose converts to String (vice-versa)
+
+                12) Delete sandbox routes after testing db connection
+                    
+
+                13) in app.js, create route to display blog info. on webpage
+                    - done by retrieving data from db instead of hardcoding
+
+                            app.get('/', (req, res) => {
+                                Blog.find()
+                                .then((result) => {
+                                    res.render('index', {title: "Home", blogs: result});
+                                })
+                                .catch((err) => {
+                                    console.log(err);
+                                });
+                            });
+
+
+                Blog.find().sort({ createdAt: -1}); // -1 means sort descending based on createdAt
+                result:
+                [
+                    {
+                        _id: new ObjectId("64a78616f9268c1d5eaf15a5"),
+                        title: 'new blog',
+                        snippet: 'about new blog',
+                        body: 'body of new blog',
+                        createdAt: 2023-07-07T03:27:18.492Z,
+                        updatedAt: 2023-07-07T03:27:18.492Z,
+                        __v: 0
+                    }
+                ]
+
+    
