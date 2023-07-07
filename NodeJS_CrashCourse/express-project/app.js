@@ -14,12 +14,12 @@ mongoose.connect(dbURI, {useNewUrlParser:true, useUnifiedTopology: true})
 .catch((err) => {console.log(err)});
 
 app.set('view engine', 'ejs');
-
+app.use(express.urlencoded({extended: true}));
 app.use(morgan('dev'));
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-    Blog.find() // retrieve all data from Database
+    Blog.find().sort({createdAt: -1}) // retrieve all data from Database
     .then((result) => {
         console.log(result);
         res.render('index', {title: "Home", blogs: result});
@@ -35,6 +35,38 @@ app.get('/about', (req, res) => {
 
 app.get('/blogs/create', (req, res)=>{
     res.render('create', {title: "Create New Blog"});
+});
+
+app.post("/blogs", (req, res) => {
+    console.log(req.body); // must add app.use(express.urlencoded({extended: true})); to get form data, else undefined
+    const blog = new Blog(req.body);
+    blog.save() // save to database
+    .then((result)=>{
+        res.redirect("/");
+    })
+    .catch((err) => {
+        console.log(err);
+    });
+});
+
+app.get("/blogs/:id", (req, res) => {
+    const id = req.params.id; // to retrieve route params from URL
+    console.log(id); // check that id retrieved correctly
+
+    Blog.findById(id)
+    .then(result => {
+        res.render("details", {blog: result, title: 'Blog Details'})
+    })
+    .catch((err) => {
+        console.log(err);
+    });
+});
+
+app.delete("/blogs/:id", (req, res) => {
+    const id = req.params.id;
+    Blog.findByIdAndDelete(id)
+    .then((result) => res.json(result))
+    .catch((err) => {console.log(err);});
 });
 
 app.use((req, res) => {

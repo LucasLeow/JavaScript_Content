@@ -811,7 +811,8 @@ Learnings in this text:
                             background: crimson;
                         }
                     5) go to head.ejs
-                        - <link rel="stylesheet" href="styles.css">
+                        - <link rel="stylesheet" href="/styles.css">
+                            * Must include "/", else wont work for some files
                             - express will automatically look into "public" directory
                             - since "public" was given as argument (see step 2)
 
@@ -1047,7 +1048,136 @@ Learnings in this text:
                     - already completed with Blog.find()
                 - localhost:3000/blogs/create: GET webpage with webform
                     - already completed with res.render('index')
+
                 - localhost:3000/blogs : POST new blog (possible to have same route with different CRUD action)
                 - localhost:3000/blogs/:id GET specific blog
                 - localhost:3000/blogs/:id :DELETE specific blog
                 - localhost:3000/blogs/:id : PUT (update specific blog)
+
+            2) Start on POST request route for new blog
+                Step 1: Create new instance of blog Model
+                Step 2: Add form data provided by user into instance
+                Step  3: Upload model with data into database
+
+                * Posting data directly from webform:
+
+                    1) Go to create.ejs (setting up web form data)
+                        1.1)  <form action="/blogs" method="POST">
+                            - When click on submit, will send POST request to "/blogs" route
+
+                        1.2) must add "name" attribute to all input tags
+                            - so data will be passed in body of POST request
+                            - typically name attribute have same value as id attribute
+
+                            eg:
+                                <input type="text" id="title" name="title" required>
+                                <input type="text" id="snippet" name="snippet" required>
+                                <textarea id="body" cols="30" rows="10" name="body" required></textarea>
+                            
+                            - To access values on server, will use the value of "name" attribute
+                            * Need to refresh page to catch front-end changes
+                    
+                            1.3) Handling data on Server (in app.js)
+
+                                    app.use(express.urlencoded({extended: true}));
+                                                - middleware to convert form data into correct format
+                                                - parses urlencoded data from form into object format suitable to send in req obj
+                                                - MUST add to access req.body of form data.
+                                                * add above app.use(morgan('dev'));
+
+                                    -- Create a POST route handler --
+
+                                                app.post("/blogs", (req, res) => {
+                                                    console.log(req.body); // to check if form data parsed correctly
+                                                    const blog = new Blog(req.body);
+                                                    blog.save() // save to database
+                                                    .then((result)=>{
+                                                        res.redirect("/"); // redirect to home page after posting data
+                                                    })
+                                                    .catch((err) => {
+                                                        console.log(err);
+                                                    });
+                                                });
+
+                3) GET request for single Blog
+                    - using Route parameters
+                        - part of route that have dynamic value
+                        eg: 
+                        localhost:3000/blogs/:id
+                            - localhost:3000/blogs/12345
+                        
+                            3.1) Go to index.ejs
+                                - surround each <h3> & <p> with <a> to make it a clickable link
+                                - clickable link should pass a URL with route param. of each unique ID
+
+                                        <% if (blogs.length > 0) { %>
+                                                <% blogs.forEach((item) => { %>
+                                                    <a class="single" href="/blogs/<%=item._id%>"> // here is the new addition <a> tags
+                                                        <h3 class="title"><%= item.title %></h3>
+                                                        <p class="snippet"><%= item.snippet %></p>
+                                                    </a> // closing of <a> tags
+                                                <% }) %>
+                                        <% } else { %>
+                                                    <p>There are no blogs to display..</p>
+                                        <% } %>
+
+                                3.2) Establish Route Handler (Go to app.js)
+
+                                    app.get("/blogs/:id", (req, res) => {
+                                        const id = req.params.id;
+                                        console.log(id); // check that id retrieved correctly
+
+                                        Blog.findById(id)
+                                        .then(result => {
+                                            render("details", {blog: result, title: 'Blog Details'})
+                                        })
+                                        .catch((err) => {
+                                            console.log(err);
+                                        });
+                                    });
+
+                                3.3) create details.ejs to show individual blog details in "view" dir
+                                    - see details.ejs for implemented code
+                                    
+                                3.4) Go to styles.css & add some styles to make blog content nicer
+
+                    4) DELETE Request for single blog
+                        - using button to delete
+
+                        4.1) Go to details.ejs (webpage for each blog post)
+
+                        include : <a class="delete" data-doc="<%= blog.id%>">delete</a>
+                            - at bottom of <body>
+                        - data-doc attribute:
+                            - special attribute within HTML, allow adding of own custom attributes
+                            - prefix with "data-"
+                            - data-doc appended with blog.id
+                                - <blog> was passed from app.js (result) from mongoose Model .findById Method
+
+                            4.2) Utilize front-end JS to create delete Request
+                                - go to details.ejs (bottom of <body>)
+
+                                <script>
+                                    const trashcan = document.querySelector("a.delete");
+                                    trashcan.addEventListener("click", (e) => {
+                                        const endpoint = `/blogs/${trashcan.dataset.doc}`; //dataset to assess custom html data- attribute
+                                        fetch(endpoint, {
+                                            method: "DELETE"
+                                        })
+                                        .then(() => {
+
+                                        })
+                                        .catch((err) => {console.log(err);});
+                                    });
+                                </script>
+
+                                - adds eventListener to send a request using JS fetch API
+                                - Essentially an AJAX request
+                                    - cannot use redirect as response for AJAX
+                                    - only can send JSON / text data back to browser
+                                    - JSON data should have redirect property (URL that can be redirected to)
+                                    - the only way to do it for AJAX request, cannot use server to redirect
+
+                                4.3) Add route to handle DELETE request
+                                    - go to app.js
+
