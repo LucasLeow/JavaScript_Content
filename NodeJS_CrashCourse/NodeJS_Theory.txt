@@ -8,9 +8,14 @@ Learnings in this text:
     - ViewEngine (EJS)
         - using "views" & "partials"
         - creating .ejs files to serve dynamic HTML (using ejs tags <% %>)
+    - Middleware
+        - app.use(callback)
+        - app.get(path, callback) (any middleware after this not executed since res sent)
+    - MongoDB
+        - setup
+        - mongoose (Schema & Model) + sandbox testing routes
     
-
-
+    
 == 1 Intro & Setup ==
    
     - What is NodeJS
@@ -33,7 +38,6 @@ Learnings in this text:
         - No need to learn extra language for Backend (if alrdy familiar)
         - share code b/w front-end & back-end
         - massive community, library & frameworks
-
 
 
 == 2 Node.js Basics ==
@@ -1023,4 +1027,27 @@ Learnings in this text:
                     }
                 ]
 
+
+== 10 GET, POST, DELETE Requests ==
+
+    - GET : retrieve data from db
+    - POST : create new data (idempotent) (only run once, avoid duplicates)
+    - DELETE : delete data
+    - PUT : update existing data
     
+    localhost:3000/blogs
+        - GET
+        - POST
+        * Possible for 1 route to perform > 1 CRUD actions
+            - handled differently based on data submitted
+
+        1) Think about all the routes required to perform CRUD actions
+
+                - localhost:3000/blogs : GET webpage with all blogs
+                    - already completed with Blog.find()
+                - localhost:3000/blogs/create: GET webpage with webform
+                    - already completed with res.render('index')
+                - localhost:3000/blogs : POST new blog (possible to have same route with different CRUD action)
+                - localhost:3000/blogs/:id GET specific blog
+                - localhost:3000/blogs/:id :DELETE specific blog
+                - localhost:3000/blogs/:id : PUT (update specific blog)

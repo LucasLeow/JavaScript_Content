@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const Blog = require("./models/blog");
 
 const app = express();
-const dbURI = "mongodb+srv://testlucas:@lucascluster.hr7yd6q.mongodb.net/node-crash-course?retryWrites=true&w=majority";
+const dbURI = "mongodb+srv://testlucas:evilred@lucascluster.hr7yd6q.mongodb.net/node-crash-course?retryWrites=true&w=majority";
 
 mongoose.connect(dbURI, {useNewUrlParser:true, useUnifiedTopology: true})
 .then((result) => {
@@ -19,7 +19,7 @@ app.use(morgan('dev'));
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-    Blog.find()
+    Blog.find() // retrieve all data from Database
     .then((result) => {
         console.log(result);
         res.render('index', {title: "Home", blogs: result});
@@ -30,11 +30,11 @@ app.get('/', (req, res) => {
 });
 
 app.get('/about', (req, res) => {
-    res.render('about', {title: "Dynamic About"});
+    res.render('about', {title: "About me"});
 });
 
 app.get('/blogs/create', (req, res)=>{
-    res.render('create', {title: "Dynamic Create"});
+    res.render('create', {title: "Create New Blog"});
 });
 
 app.use((req, res) => {

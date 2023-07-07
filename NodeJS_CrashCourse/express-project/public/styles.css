@@ -63,6 +63,7 @@ h3 {
     max-width: 400px;
     margin: 0 auto;
 }
+
 .create-blog input,
 .createblog textarea {
     display: block;
@@ -87,3 +88,4 @@ h3 {
     cursor: pointer;
     border-radius: 5px;
 }
+
