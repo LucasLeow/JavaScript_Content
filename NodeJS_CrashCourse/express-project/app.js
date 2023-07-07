@@ -64,8 +64,11 @@ app.get("/blogs/:id", (req, res) => {
 
 app.delete("/blogs/:id", (req, res) => {
     const id = req.params.id;
+    console.log("in delete backend",id);
     Blog.findByIdAndDelete(id)
-    .then((result) => res.json(result))
+    .then((result) => {
+        res.json({ redirect: "/"});
+    })
     .catch((err) => {console.log(err);});
 });
 

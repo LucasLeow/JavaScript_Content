@@ -1181,3 +1181,28 @@ Learnings in this text:
                                 4.3) Add route to handle DELETE request
                                     - go to app.js
 
+                                    app.delete("/blogs/:id", (req, res) => {
+                                        const id = req.params.id;
+                                        Blog.findByIdAndDelete(id)
+                                        .then((result) => {
+                                            res.json( { redirect: "/" })
+                                        })
+                                        .catch((err) => {
+                                            console.log(err);
+                                        })
+                                    });
+
+                                    4.4) go back to front-end (details.ejs) to handle json sent from app.js
+                                        (json sent was {redirect:  "/"})
+                                            - handle in the .then() method from the fetch call
+
+                                        fetch(endpoint, {
+                                            method: "DELETE"
+                                        })
+                                        .then((res) => { // response sent from backend
+                                            res.json(); // to convert json to JS obj
+                                        })
+                                        .then((data) => {
+                                            console.log(data); // will be logged on browser, not server-side
+                                            window.location.href=data.redirect;
+                                        })
