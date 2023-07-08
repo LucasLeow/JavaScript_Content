@@ -32,6 +32,10 @@ nav li {
     list-style-type: none;
     margin-left:20px;
 }
+
+a:hover {
+    color:red;
+}
 nav h1 {
     font-size: 3em;
 }

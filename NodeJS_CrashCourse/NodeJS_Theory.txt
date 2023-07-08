@@ -1214,3 +1214,134 @@ Learnings in this text:
         - Built into Express framework
         - can be used to manage route more efficiently 
         - split routes into different files, grouping them into relevent smaller groups
+        - makes app more modular & easier to update
+
+            1) Look for routes with same URL but different methods
+                eg:
+                    "/blogs/:id"  for GET | POST
+                
+            2) create dir called "routes"
+                - create blogRoutes.js
+                - copy & paste all /blogs routes into blogRoutes.js
+                    - including /blogs/:id
+                    
+                    at the top of blogRoutes.js:
+
+                        const express = require("express");
+
+                        const router = express.Router();
+
+                        - replace all app.<method> with router.<method>
+
+                        eg: app.get("/blogs",...) -> router.get("/blogs",...)
+
+
+                        module.exports = router;
+
+                3)  go to app.js to import blogRoutes router
+                    - transfer const Blog = require('./models/blog'); to blogRoutes.js
+                        * app.js no longer interacting directly with db
+
+                    const blogRoutes = require('./routes/blogRoutes');
+
+                    - app.use(blogRoutes); // placed at the spot where ALL the routes were previously at
+
+                    app.get('/',..);
+                    app.get('/about',..);
+                    app.use(blogRoutes);
+
+                * Note:
+                    - inside blogRoutes.js
+                        - router.get("/blogs/create") should be above router.get("/blogs/:id")
+                        - because "create" could also be recognized as id
+                        - "create" does not exist in DB, resulting in error
+
+                4) Possible to scope routes to certain URL
+                    - go to app.js
+
+                        app.use("/blogs", blogRoutes);
+                    
+                    - go to blogRoutes.js
+                    - remove "/blogs" from all the routes
+                    - else, will become /blogs/blogs to access because double specifying
+
+                    Benefits:
+                        - if change URL structure, don't have to change everything, just change at app.use(newURL, blogRoutes);
+
+    -- MVC Basics --
+        - Model | View | Controller
+            - a method to structure code / files
+            - keeps code more modular, reusable & easier to read
+            - not essentially, but helpful, especially for larger projects
+
+            Models
+                - Define structure & interacts with database
+            Views
+                - HTML templates for user to see
+                - in this project, ejs templates
+            Controllers
+                - forms the link between Models & Views
+                - "middleman", gets data from Models & pass data to Views
+            
+            Workflow:
+                - route file matches incoming requests
+                - passes requests to correct controller fn
+                - controller communicate with model to get data for view
+                - view renders data into template, sent back to browser
+
+                1) create "controllers" dir
+                    - create blogController.js
+                    
+                2) Think about MDN Controller Naming Conventions: (for controller functions)
+                        blog_index: get all blogs into index view
+                        blog_details: get single blog
+                        blog_create_get: get form for creating blog
+                        blog_create_post: post new blog
+                        blog_delete: delete blog
+
+                        inside blogController.js: 
+                            - copy methods from blogRoutes.js to blogController.js
+                            - export blogController functions (with given name conventions per above)
+                            - import to blogRoute.js & replace function
+
+                                const Blog = require("../models/blog");
+
+                                const blog_index = (req, res) => {
+                                        Blog.find().sort({createdAt: -1}) // retrieve all data from Database
+                                        .then((result) => {
+                                            console.log(result);
+                                            res.render('index', {title: "Home", blogs: result});
+                                        })
+                                        .catch((err) => {
+                                            console.log(err);
+                                        });
+                                };
+
+                                module.exports =  {
+                                    blog_index
+                                };
+
+                    2) Go to blogRoutes.js
+                                const express = require("express");
+                                const blogController = require("../controllers/blogController");
+
+                                const router = express.Router();
+
+                                router.get('/', blogController.blog_index);
+                                router.post("/", blogController.blog_create_post);
+                                router.get('/create', blogController.blog_create_get);
+                                router.get("/:id", blogController.blog_details);
+                                router.delete("/:id", blogController.blog_delete);
+
+                                module.exports = router;
+
+                    3) Modularize "views" folder
+                        - Sometimes, may have different functionalities in app
+                        - aside from "blogs", may also have "news" or "health" etc.
+                            - each may have its own index.ejs, about.ejs etc.
+
+                            3.1) create "blogs" dir in "views" dir
+                                - move details.ejs, index.ejs, create.ejs into "blogs" dir
+                                - Go to each moved file (details / index / create.ejs) & update path to partials
+                                - go to blogController.js to change path of newly shifted files
+                                    - res.render("blogs/index") blogs/create , blogs/details etc.
