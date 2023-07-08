@@ -1206,3 +1206,11 @@ Learnings in this text:
                                             console.log(data); // will be logged on browser, not server-side
                                             window.location.href=data.redirect;
                                         })
+
+
+== 11 Express Router & MVC ==   
+    - app.js getting clunky with lots of routes within
+    - Solution: Express Router
+        - Built into Express framework
+        - can be used to manage route more efficiently 
+        - split routes into different files, grouping them into relevent smaller groups
