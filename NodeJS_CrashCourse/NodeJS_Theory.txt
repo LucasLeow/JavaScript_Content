@@ -1345,3 +1345,20 @@ Learnings in this text:
                                 - Go to each moved file (details / index / create.ejs) & update path to partials
                                 - go to blogController.js to change path of newly shifted files
                                     - res.render("blogs/index") blogs/create , blogs/details etc.
+
+
+Handle blog not found:
+
+const blog_details = (req, res) => {
+    const id = req.params.id; // to retrieve route params from URL
+    console.log(id); // check that id retrieved correctly
+    Blog.findById(id)
+    .then(result => {
+        res.render("blogs/details", {blog: result, title: 'Blog Details'})
+    })
+    // implementation here below: instead of console logging error, redirect to 404 page
+                    .catch((err) => {
+                        res.status(404).render("error", {title: "Blog Not Found"})
+                    });
+    };
+
